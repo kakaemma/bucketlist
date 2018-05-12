@@ -1,2 +1,8 @@
 env/
 .idea/
+.coverage
+__pycache__/
+api/__pycache__/
+classes/__pycache_
+instance/__pycache
+tests/__pycache__/
