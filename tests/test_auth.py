@@ -86,7 +86,34 @@ class TestAuth(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertIn('Successfully registered', response.data.decode())
 
-   
+    def test_login_without_credentials(self):
+        """ Should throw missing credentials"""
+        response = self.client.post('/auth/login', data=self.empty_login)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Missing login credentials', response.data.decode())
+
+    def test_login_with_invalid_email(self):
+        """ Should throw invalid email address"""
+        response = self.client.post('/auth/login', data=self.invalid_login_email)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Invalid login email', response.data.decode())
+
+    def test_login_with_invalid_credentials(self):
+        """ Should throw invalid login credentials"""
+        response = self.client.post('/auth/login', data=self.invalid_user)
+        self.assertEqual(response.status_code, 401)
+        self.assertIn('Invalid Login Details', response.data.decode())
+
+    def test_successful_login(self):
+        """ Show login successful """
+        #First register the user
+        self.client.post('/auth/register', data=self.user)
+
+        response = self.client.post('/auth/login', data=self.valid_login_user)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Login successful', response.data.decode())
+
+
 
 
 
