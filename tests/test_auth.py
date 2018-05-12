@@ -49,6 +49,26 @@ class TestAuth(unittest.TestCase):
             'email': 'kakaemma',
             'password': '1234567'
         })
+        self.empty_reset_password = json.dumps({
+            'email': 'kakaemma1@gmail.com',
+            'old_password': '',
+            'new_password': ''
+        })
+        self.wrong_reset_password = json.dumps({
+            'email': 'kakaemma1@gmail.com',
+            'old_password': '2345678',
+            'new_password': '1234567'
+        })
+        self.wrong_reset_details = json.dumps({
+            'email': 'emma1@gmail.com',
+            'old_password': '1234568',
+            'new_password': 'qwertyui'
+        })
+        self.reset_details = json.dumps({
+            'email': 'kakaemma1@gmail.com',
+            'old_password': '1234567',
+            'new_password': '7654321'
+        })
 
     def test_index_route(self):
         """ Test response for title in the index page"""
@@ -112,6 +132,48 @@ class TestAuth(unittest.TestCase):
         response = self.client.post('/auth/login', data=self.valid_login_user)
         self.assertEqual(response.status_code, 200)
         self.assertIn('Login successful', response.data.decode())
+
+    def test_reset_password_with_no_password(self):
+        """ Should throw error for non existing email or password"""
+        self.client.post('/auth/register', data=self.user)
+
+        response = self.client.post('/auth/reset-password',
+                                    data=self.empty_reset_password)
+        self.assertEqual(response.status_code, 403)
+        self.assertIn('Missing email or password', response.data.decode())
+
+    def test_reset_password_with_non_existing_email(self):
+        """ Throw No account with that email"""
+        self.client.post('/auth/register', data=self.user)
+
+        response = self.client.post('/auth/reset-password',
+                                    data=self.wrong_reset_details)
+        self.assertEqual(response.status_code, 403)
+        self.assertIn('Email and password do not exist',
+                      response.data.decode())
+
+    def test_reset_password_with_wrong_password(self):
+        """ Should throw old password is wrong """
+        self.client.post('/auth/register', data=self.user)
+
+        response = self.client.post('/auth/reset-password',
+                                    data=self.wrong_reset_password)
+        self.assertEqual(response.status_code, 401)
+        self.assertIn('Old password does not match',
+                      response.data.decode())
+
+    def test_reset_password_successfully(self):
+        """ Should show password reset successfully"""
+        self.client.post('/auth/register', data=self.user)
+        response = self.client.post('/auth/reset-password',
+                                    data=self.reset_details)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Password reset successfully',
+                      response.data.decode())
+
+
+
+
 
 
 
