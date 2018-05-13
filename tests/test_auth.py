@@ -78,8 +78,8 @@ class TestAuth(unittest.TestCase):
     def test_registration_with_no_values(self):
         """ Test for registration with empty values"""
         response = self.client.post('/auth/register', data=self.empty_user)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('Missing login details', response.data.decode())
+        self.assertEqual(response.status_code, 406)
+        self.assertIn('Missing value(s)', response.data.decode())
 
     def test_registration_with_invalid_email(self):
         """ Should throw invalid email address"""
