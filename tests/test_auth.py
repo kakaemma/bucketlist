@@ -13,6 +13,11 @@ class TestAuth(unittest.TestCase):
             'email': 'kakaemma@gmail.com',
             'password': '1234567'
         })
+        self.new_user = json.dumps({
+            'name': 'emmanuel',
+            'email': 'kaka@gmail.com',
+            'password': '1234567'
+        })
         self.empty_user = json.dumps({
             'name': '',
             'email': '',
@@ -84,13 +89,13 @@ class TestAuth(unittest.TestCase):
     def test_registration_with_invalid_email(self):
         """ Should throw invalid email address"""
         response = self.client.post('/auth/register', data=self.wrong_email)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 422)
         self.assertIn('Invalid Email', response.data.decode())
 
     def test_registration_with_short_password(self):
         """ Should return password too short"""
         response = self.client.post('/auth/register', data=self.short_pass)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 422)
         self.assertIn('Password too short', response.data.decode())
 
     def test_registration_with_existing_email(self):
@@ -102,7 +107,7 @@ class TestAuth(unittest.TestCase):
 
     def test_successful_registration(self):
         """ Should return registration successful and 201 status code"""
-        response = self.client.post('/auth/register', data=self.user)
+        response = self.client.post('/auth/register', data=self.new_user)
         self.assertEqual(response.status_code, 201)
         self.assertIn('Successfully registered', response.data.decode())
 
