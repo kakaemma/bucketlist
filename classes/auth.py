@@ -1,6 +1,6 @@
 from flask import jsonify
 from validate_email import validate_email
-from models.users import UserModal,users
+from models.users import UserModal
 
 
 class Authenticate(object):
@@ -36,12 +36,44 @@ class Authenticate(object):
         if email != check_user:
             new_user = UserModal(name, email, password)
             new_user.add_user()
-            response = jsonify({'message': 'User successfully registered'})
+            response = jsonify({'message': 'Successfully registered'})
             response.status_code = 201
             return response
 
         response = jsonify({'Conflict': 'Email already exists'})
         response.status_code = 409
         return response
+
+    @staticmethod
+    def login(email, password):
+        if not email or not password:
+            response = jsonify({'Error': 'Missing login credentialss'})
+            response.status_code = 422
+            return response
+
+        if not validate_email(email):
+            response = jsonify({'Error': 'Invalid Email address'})
+            response.status_code = 422
+            return response
+
+        if not len(password) >6:
+            response = jsonify({'Error': 'Password is too short.'})
+            response.status_code = 422
+            return response
+
+        login_user = UserModal.check_user(email, password)
+
+        if not login_user:
+            response = jsonify({'Error': 'Invalid credentials'})
+            response.status_code = 401
+            return response
+
+        response = jsonify({
+                'Status': 'Successfully logged in',
+                'id': login_user
+            })
+        response.status_code = 200
+        return response
+
 
 
