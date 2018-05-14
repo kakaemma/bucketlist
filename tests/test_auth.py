@@ -114,20 +114,20 @@ class TestAuth(unittest.TestCase):
     def test_login_without_credentials(self):
         """ Should throw missing credentials"""
         response = self.client.post('/auth/login', data=self.empty_login)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 422)
         self.assertIn('Missing login credentials', response.data.decode())
 
     def test_login_with_invalid_email(self):
         """ Should throw invalid email address"""
         response = self.client.post('/auth/login', data=self.invalid_login_email)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('Invalid login email', response.data.decode())
+        self.assertEqual(response.status_code, 422)
+        self.assertIn('Invalid Email address', response.data.decode())
 
     def test_login_with_invalid_credentials(self):
-        """ Should throw invalid login credentials"""
+        """ Should throw invalid credentials"""
         response = self.client.post('/auth/login', data=self.invalid_user)
         self.assertEqual(response.status_code, 401)
-        self.assertIn('Invalid Login Details', response.data.decode())
+        self.assertIn('Invalid credentials', response.data.decode())
 
     def test_successful_login(self):
         """ Show login successful """
@@ -135,7 +135,7 @@ class TestAuth(unittest.TestCase):
 
         response = self.client.post('/auth/login', data=self.valid_login_user)
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Login successful', response.data.decode())
+        self.assertIn('Successfully logged in', response.data.decode())
 
     def test_reset_password_with_no_password(self):
         """ Should throw error for non existing email or password"""
