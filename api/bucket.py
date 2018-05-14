@@ -28,9 +28,21 @@ def register():
     except KeyError:
         invalid_keys()
 
-@app.route('/auth/login')
+@app.route('/auth/login', methods=['POST'])
 def login():
-    pass
+    request.get_json(force=True)
+    try:
+        email = request.json['email']
+        password = request.json['password']
+        response = Authenticate.login(email, password)
+        print(response)
+        response = operation_successful(response)
+        return  response
+    except KeyError:
+        invalid_keys()
+
+
+
 
 
 def invalid_keys():
@@ -39,10 +51,11 @@ def invalid_keys():
     return  response
 
 def operation_successful(response):
-    if response.status_code == 201:
+    if response.status_code == 200 and \
+            response.data.decode()=='Successfully logged in':
         data = json.loads(response.data.decode())
         response = jsonify(data)
-        response.status_code =201
+        response.status_code =200
     return response
 
 
