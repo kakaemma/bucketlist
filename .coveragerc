@@ -1,0 +1,26 @@
+[report]
+omit =
+    */python?.?/*
+    */site-packages/nose/*
+    *__init__*
+    */werkzeug/*
+    */jinja2/*
+    */flask/*
+    */colorama/*
+    */click/*
+    */asyncio/*
+    */concurrent/*
+    */ctypes/*
+    */html/*
+    */email/*
+    */flask_api/*
+    */pydoc/*
+    */http/*
+    */encodings/*
+    */markupsafe/*
+    */multiprocessing/*
+    */pydoc.py/*
+    */env/*
+    
+    
+
