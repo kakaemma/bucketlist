@@ -10,7 +10,12 @@ class TestAuth(unittest.TestCase):
         self.client = app.test_client()
         self.user = json.dumps({
             'name': 'emmanuel',
-            'email': 'kakaemma@gmail.com',
+            'email': 'kakaemma1@gmail.com',
+            'password': '1234567'
+        })
+        self.reset_user = json.dumps({
+            'name': 'emmanuel',
+            'email': 'ekaka@gmail.com',
             'password': '1234567'
         })
         self.new_user = json.dumps({
@@ -35,8 +40,8 @@ class TestAuth(unittest.TestCase):
         })
         self.conflict_mail = json.dumps({
             'name': 'emmanuel',
-            'email': 'kakaemma@gmail.com',
-            'password': '12345'
+            'email': 'kakaemma1@gmail.com',
+            'password': '12345567'
         })
         self.empty_login = json.dumps({
             'email': '',
@@ -55,23 +60,28 @@ class TestAuth(unittest.TestCase):
             'password': '1234567'
         })
         self.empty_reset_password = json.dumps({
-            'email': 'kakaemma1@gmail.com',
-            'old_password': '',
+            'email': '',
+            'password': '',
             'new_password': ''
-        })
-        self.wrong_reset_password = json.dumps({
-            'email': 'kakaemma1@gmail.com',
-            'old_password': '2345678',
-            'new_password': '1234567'
         })
         self.wrong_reset_details = json.dumps({
             'email': 'emma1@gmail.com',
-            'old_password': '1234568',
+            'password': '1234568',
             'new_password': 'qwertyui'
         })
+        self.reset_user = json.dumps({
+            'name': 'emmanuel',
+            'email': 'lp@gmail.com',
+            'password': '1234567'
+        })
+        self.wrong_old_password = json.dumps({
+            'email': 'lp@gmail.com',
+            'password': '1234567',
+            'new_password': 'vfgty65'
+        })
         self.reset_details = json.dumps({
-            'email': 'kakaemma1@gmail.com',
-            'old_password': '1234567',
+            'email': 'lp@gmail.com',
+            'password': '1234567',
             'new_password': '7654321'
         })
 
@@ -139,11 +149,12 @@ class TestAuth(unittest.TestCase):
 
     def test_reset_password_with_no_password(self):
         """ Should throw error for non existing email or password"""
+        self.tearDown()
         self.client.post('/auth/register', data=self.user)
 
         response = self.client.post('/auth/reset-password',
                                     data=self.empty_reset_password)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 422)
         self.assertIn('Missing email or password', response.data.decode())
 
     def test_reset_password_with_non_existing_email(self):
@@ -157,18 +168,19 @@ class TestAuth(unittest.TestCase):
                       response.data.decode())
 
     def test_reset_password_with_wrong_password(self):
-        """ Should throw old password is wrong """
+        """ Throw No account with that email"""
         self.client.post('/auth/register', data=self.user)
 
         response = self.client.post('/auth/reset-password',
-                                    data=self.wrong_reset_password)
-        self.assertEqual(response.status_code, 401)
-        self.assertIn('Old password does not match',
+                                    data=self.wrong_reset_details)
+        self.assertEqual(response.status_code, 403)
+        self.assertIn('Email and password do not exist',
                       response.data.decode())
 
     def test_reset_password_successfully(self):
         """ Should show password reset successfully"""
-        self.client.post('/auth/register', data=self.user)
+        self.tearDown()
+        self.client.post('/auth/register', data=self.reset_user)
         response = self.client.post('/auth/reset-password',
                                     data=self.reset_details)
         self.assertEqual(response.status_code, 200)
