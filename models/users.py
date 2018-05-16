@@ -20,10 +20,36 @@ class UserModal(object):
 
     @staticmethod
     def check_user(email, password):
-        resp = 'no user'
         for user in users:
             if user.email == email and user.password == password:
                 response = user.id
                 return response
+
+
+    @staticmethod
+    def check_user_email(email):
+        for user in users:
+            if user.email == email:
+                response = user.email
+                return response
+
+    @staticmethod
+    def check_user_return_pass(email):
+        for user in users:
+            if user.email == email:
+                response = user.password
+                return response
+
+
+    @staticmethod
+    def reset_user_pass(email, new_password):
+        resp = 'no user'
+        for user in users:
+            if user.email == email:
+                user.password = new_password
+                response = user.id
+                return response
             return resp
+
+
 
