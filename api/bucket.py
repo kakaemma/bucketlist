@@ -41,6 +41,25 @@ def login():
     except KeyError:
         invalid_keys()
 
+@app.route('/auth/reset-password', methods=['POST'])
+def reset_password():
+    request.get_json(force=True)
+    try:
+        email = request.json['email']
+        old_pass = request.json['password']
+        new_pass = request.json['new_password']
+        response = Authenticate.reset_password(email, old_pass, new_pass)
+        response = operation_successful(response)
+        return response
+
+    except KeyError:
+        invalid_keys()
+
+
+
+@app.route('/auth/logout', methods=['POST'])
+def logout():
+    pass
 
 
 
