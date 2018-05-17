@@ -48,9 +48,9 @@ class Authenticate(object):
 
 
     @staticmethod
-    def login(email, password):
+    def login(email, user_password):
         if not email or not password:
-            response = jsonify({'Error': 'Missing login credentialss'})
+            response = jsonify({'Error': 'Missing login credentials'})
             response.status_code = 422
             return response
 
@@ -59,12 +59,12 @@ class Authenticate(object):
             response.status_code = 422
             return response
 
-        if not len(password) >6:
+        if not len(user_password) >6:
             response = jsonify({'Error': 'Password is too short.'})
             response.status_code = 422
             return response
 
-        login_user = UserModal.check_user(email, password)
+        login_user = UserModal.check_user(email, user_password)
 
         if not login_user:
             response = jsonify({'Error': 'Invalid credentials'})
