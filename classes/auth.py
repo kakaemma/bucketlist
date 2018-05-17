@@ -46,10 +46,9 @@ class Authenticate(object):
             return response
 
 
-
     @staticmethod
     def login(email, user_password):
-        if not email or not password:
+        if not email or not user_password:
             response = jsonify({'Error': 'Missing login credentials'})
             response.status_code = 422
             return response
@@ -114,7 +113,7 @@ class Authenticate(object):
         if not reset_password:
             response = jsonify({'Error': 'Password change failed'})
             response.status_code = 401
-            return  response
+            return response
 
         response = jsonify({'Success': 'Password reset successfully'})
         response.status_code = 200
