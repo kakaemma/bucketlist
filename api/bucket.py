@@ -145,4 +145,4 @@ def decode_auth_token(auth_token):
 
 
 def get_token():
-    return request.headers.get('Authorisation')
+    return decode_auth_token(request.headers.get('Authorisation'))
