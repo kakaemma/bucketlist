@@ -59,8 +59,8 @@ class Authenticate(object):
             response.status_code = 422
             return response
 
-        if not len(user_password) >6:
-            response = jsonify({'Error': 'Password is too short.'})
+        if len(user_password) < 6:
+            response = jsonify({'Error': 'Login Password is too short.'})
             response.status_code = 422
             return response
 
