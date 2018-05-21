@@ -11,12 +11,20 @@ class UserModal(object):
     def add_user(self):
         users.append(self)
 
+
+
     @staticmethod
     def check_user_email(email):
         for user in users:
             if user.email == email:
                 return user.email
             return 'no user'
+
+    @classmethod
+    def get_user_id(cls, email):
+        for user in users:
+            if user.email == email:
+                return user.id
 
     @staticmethod
     def check_user(email, password):
