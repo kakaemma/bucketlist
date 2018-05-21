@@ -47,7 +47,11 @@ class Authenticate(object):
         if email != check_user:
             new_user = UserModal(name, email, password)
             new_user.add_user()
-            response = jsonify({'message': 'Successfully registered'})
+            auth_id = UserModal.get_user_id(email)
+            response = jsonify({
+                'message': 'Successfully registered',
+                'id': auth_id
+            })
             response.status_code = 201
             return response
 
