@@ -1,6 +1,7 @@
 from flask import jsonify, request, json, render_template
 from api import create_app
 from classes.auth import Authenticate
+from classes.bucket import Bucket
 import datetime
 import jwt
 
@@ -63,6 +64,24 @@ def reset_password():
     except KeyError:
         invalid_keys()
 
+@app.route('/buckets', methods=['POST'])
+def add_bucket():
+    request.get_json(force=True)
+    try:
+        user_id = get_token()
+        if isinstance(user_id, int):
+            name = request.json['name']
+            desc = request.json['desc']
+            response = Bucket.add_bucket(name, desc, user_id)
+            response = operation_successful(response)
+            return response
+
+        else:
+            return invalid_token()
+
+    except KeyError:
+        invalid_keys()
+
 
 @app.route('/auth/logout', methods=['POST'])
 def logout():
@@ -85,11 +104,11 @@ def operation_successful(response):
     :param response: 
     :return: 
     """
-    if response.status_code == 200 and \
-            response.data.decode() == 'Successfully logged in':
+    if response.status_code == 201:
         data = json.loads(response.data.decode())
+        data['token'] = encode_auth_token(data['id']).decode()
         response = jsonify(data)
-        response.status_code = 200
+        response.status_code = 201
     return response
 
 
@@ -111,7 +130,7 @@ def encode_auth_token(user_id):
     """
     try:
         payload = {
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(2),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=2),
             'iat': datetime.datetime.utcnow(),
             'sub': user_id
 
@@ -132,7 +151,7 @@ def decode_auth_token(auth_token):
     """
     try:
         payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
-        return payload
+        return payload['sub']
     except jwt.ExpiredSignature:
         response = jsonify({'Signature expired. ': 'Please login again'})
         response.status_code = 401
@@ -145,4 +164,4 @@ def decode_auth_token(auth_token):
 
 
 def get_token():
-    return decode_auth_token(request.headers.get('Authorisation'))
+    return decode_auth_token(request.headers.get("Authorization"))
