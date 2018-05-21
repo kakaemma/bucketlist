@@ -105,10 +105,10 @@ def operation_successful(response):
     :return: 
     """
     if response.status_code == 201:
-        data = json.loads(response.data.decode())
-        data['token'] = encode_auth_token(data['id']).decode()
-        response = jsonify(data)
-        response.status_code = 201
+        # data = json.loads(response.data.decode())
+        # data['token'] = encode_auth_token(data['id']).decode()
+        # response = jsonify(data)
+        # response.status_code = 201
         return response
     return response
 
