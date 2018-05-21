@@ -11,7 +11,7 @@ class TestBucket(unittest.TestCase):
 
         self.user = json.dumps({
             'name': 'emma',
-            'email': 'em@gmail.com',
+            'email': '1234@gmail.com',
             'password': '12345678'
         })
         response = self.client.post('/auth/register', data=self.user)
