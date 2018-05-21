@@ -18,16 +18,16 @@ class TestBucket(unittest.TestCase):
         json_data = json.loads(response.data.decode())
         self.token = json_data['token']
 
-    def test_add_bucket_without_name(self):
-        bucket = json.dumps({
-            'name': '',
-            'desc': 'rally wins'
-        })
-        response = self.client.post('/buckets', data=bucket,
-                                    headers={"Authorization": self.token})
-        self.assertEquals(response.status_code, 400)
-        self.assertIn('Missing details', response.data.decode())
-        self.tearDown()
+    # def test_add_bucket_without_name(self):
+    #     bucket = json.dumps({
+    #         'name': '',
+    #         'desc': 'rally wins'
+    #     })
+    #     response = self.client.post('/buckets', data=bucket,
+    #                                 headers={"Authorization": self.token})
+    #     self.assertEquals(response.status_code, 400)
+    #     self.assertIn('Missing details', response.data.decode())
+    #     self.tearDown()
 
 
     # def test_add_bucket_successfully(self):
