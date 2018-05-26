@@ -4,7 +4,10 @@ from flask import request, jsonify
 from models.users import UserModal
 import datetime
 import jwt
-# app = create_app('DevelopmentEnv')
+#
+# from api.bucket import app ( When i use this import, there is an error)
+# from api.bucket import * ( this makes everything fine but its importing everything
+
 
 
 def get_token():
@@ -16,6 +19,7 @@ def get_token():
     except Exception as e:
         # log error
         return e
+
 
 
 def method_to_be_returned(func, *args, **kwargs):
