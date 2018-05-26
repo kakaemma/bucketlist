@@ -1,6 +1,7 @@
 from flask import jsonify
 from validate_email import validate_email
 from models.users import UserModal
+from utility.utility import encode_auth_token
 
 
 class Authenticate(object):
@@ -49,8 +50,8 @@ class Authenticate(object):
             new_user.add_user()
             auth_id = UserModal.get_user_id(email)
             response = jsonify({
-                'message': 'Successfully registered',
-                'id': auth_id
+                'status': 'Successfully registered',
+                'user': email
             })
             response.status_code = 201
             return response
@@ -84,9 +85,11 @@ class Authenticate(object):
             response.status_code = 401
             return response
 
+        token = encode_auth_token(login_user)
         response = jsonify({
-                'Status': 'Successfully logged in',
-                'id': login_user
+            'token': token.decode('ascii'),
+            'Status': 'Successfully logged in'
+
             })
         response.status_code = 200
         return response
