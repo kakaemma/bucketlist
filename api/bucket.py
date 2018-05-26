@@ -2,7 +2,7 @@ from flask import jsonify, request, json, render_template
 from api import create_app
 from classes.auth import Authenticate
 from classes.bucket import Bucket
-import datetime
+from utility.utility import validate_content_type, validate_token
 import jwt
 
 app = create_app('TestingEnv')
@@ -122,26 +122,6 @@ def invalid_token():
     response.status_code = 400
     return response
 
-
-def encode_auth_token(user_id):
-    """
-    Generates the auth token
-    :param user_id: 
-    :return: String
-    """
-    try:
-        payload = {
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=2),
-            'iat': datetime.datetime.utcnow(),
-            'sub': user_id
-
-        }
-        return jwt.encode(
-            payload,
-            app.config.get('SECRET_KEY'),
-            algorithm='HS256')
-    except Exception as e:
-        return e
 
 
 def decode_auth_token(auth_token):
