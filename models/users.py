@@ -26,6 +26,12 @@ class UserModal(object):
             if user.email == email:
                 return user.id
 
+    @classmethod
+    def get_user_by_id(cls, user_id):
+        for user in users:
+            if user.id == user_id:
+                return user.id
+
     @staticmethod
     def check_user(email, password):
         for user in users:
