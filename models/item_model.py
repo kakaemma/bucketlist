@@ -22,11 +22,15 @@ class BucketItems(object):
         self.date = datetime.datetime.utcnow()
         self.bucket_id = bucket_id
 
+    #-----------------------------------------------------------------------
+
     def add_item(self):
         """ 
         This adds an item to the model
         """
         items.append(self)
+
+    #-----------------------------------------------------------------------
 
     def update_item(cls, bucket_id, item_id, new_name, new_status):
         """
@@ -42,6 +46,8 @@ class BucketItems(object):
                 each_item.name = new_name
                 each_item.status = new_status
                 return each_item.id
+
+    #-----------------------------------------------------------------------
 
     def delete_item(cls, item_id):
         """
