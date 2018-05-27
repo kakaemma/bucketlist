@@ -86,9 +86,9 @@ class Authenticate(object):
             return response
 
         token = encode_auth_token(login_user)
-        
+
         response = jsonify({
-            'token': token.decode(),
+            'token': 'token.decode()',
             'Status': 'Successfully logged in'
 
             })
