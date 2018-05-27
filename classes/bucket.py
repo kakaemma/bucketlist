@@ -10,6 +10,7 @@ class Bucket(object):
             response.status_code = 400
             return response
 
+
         add_bucket = BucketModal(name, desc)
         response = jsonify({
             'message': 'Bucket " ' + name + ' " added',
