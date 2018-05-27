@@ -1,5 +1,5 @@
 import datetime
-bucket =[]
+bucket = []
 
 
 class BucketModal(object):
@@ -13,32 +13,34 @@ class BucketModal(object):
     def create_bucket(self):
         bucket.append(self)
 
-    def get_buckets(cls):
-        response =[]
+    @staticmethod
+    def get_buckets():
+        response = []
         for each_bucket in bucket:
             response.append({'id': each_bucket.id,
                              'name': each_bucket.name,
                              'description': each_bucket.desc,
                              'date_created': each_bucket.date,
-                             'date_modified':each_bucket.modify_date
+                             'date_modified': each_bucket.modify_date
                              })
             return response
 
-    def get_bucket(cls,bucket_id):
+    @staticmethod
+    def get_bucket(bucket_id):
         response = []
         for this_bucket in bucket:
             if this_bucket.id == bucket_id:
                 response.append({'id': this_bucket.id,
-                                 'name':this_bucket.name,
-                                 'description':this_bucket.desc,
+                                 'name': this_bucket.name,
+                                 'description': this_bucket.desc,
                                  'date_created': this_bucket.date,
                                  'date modified': this_bucket.modify_date
                                  })
                 return response
             return None
 
-
-    def modify_bucket(cls, modify_id, name, desc):
+    @staticmethod
+    def modify_bucket(modify_id, name, desc):
         for this_bucket in bucket:
             if this_bucket.id == modify_id:
                 this_bucket.name = name
@@ -47,15 +49,7 @@ class BucketModal(object):
                 return this_bucket.id
             return None
 
-
     def delete_bucket(cls, del_id):
         for this_bucket in bucket:
             if this_bucket.id == del_id:
                 bucket.remove(this_bucket)
-
-
-
-
-
-
-
