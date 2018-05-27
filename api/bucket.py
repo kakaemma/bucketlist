@@ -3,20 +3,24 @@ from api import create_app
 from classes.auth import Authenticate
 from classes.bucket import Bucket
 from utility.utility import validate_content_type, validate_token
-import jwt
+
 
 app = create_app('TestingEnv')
 
 
 @app.route('/')
 def index():
-    """ Index route """
+    """ 
+    Index route 
+    """
     return render_template('index.html')
-
+#-------------------------------------------------------------------------
 
 @app.route('/auth/register', methods=['POST'])
 def register():
-    """ Register a user with this endpoint """
+    """ 
+    Register a user with this endpoint 
+    """
 
     request.get_json(force=True)
     try:
@@ -30,11 +34,13 @@ def register():
 
     except KeyError:
         invalid_keys()
-
+#-------------------------------------------------------------------------
 
 @app.route('/auth/login', methods=['POST'])
 def login():
-    """End point for login"""
+    """
+    End point for login
+    """
 
     request.get_json(force=True)
     try:
@@ -46,11 +52,13 @@ def login():
         return response
     except KeyError:
         invalid_keys()
-
+#-------------------------------------------------------------------------
 
 @app.route('/auth/reset-password', methods=['POST'])
 def reset_password():
-    """End point for reset password"""
+    """
+    End point for reset password
+    """
 
     request.get_json(force=True)
     try:
@@ -63,30 +71,40 @@ def reset_password():
 
     except KeyError:
         invalid_keys()
+#-------------------------------------------------------------------------
+
 
 @app.route('/buckets', methods=['POST'])
 def add_bucket():
-    request.get_json(force=True)
+    """ 
+    End point for adding bucket
+    """
     try:
-        user_id = get_token()
-        if isinstance(user_id, int):
-            name = request.json['name']
-            desc = request.json['desc']
-            response = Bucket.add_bucket(name, desc, user_id)
-            response = operation_successful(response)
-            return response
-
-        else:
-            return invalid_token()
-
+        name = request.json['name']
+        desc = request.json['desc']
+        response = Bucket.add_bucket(name, desc)
+        response = operation_successful(response)
+        return response
     except KeyError:
         invalid_keys()
 
+#-------------------------------------------------------------------------
+
+@app.route('/buckets', methods=['GET'])
+def get_buckets():
+    """ 
+    This endpoints gets all buckets
+    """
+    try:
+        pass
+    except KeyError:
+        invalid_keys()
+#-------------------------------------------------------------------------
 
 @app.route('/auth/logout', methods=['POST'])
 def logout():
     pass
-
+#-------------------------------------------------------------------------
 
 def invalid_keys():
     """
@@ -96,7 +114,7 @@ def invalid_keys():
     response = jsonify({'Error': 'Invalid keys'})
     response.status_code = 400
     return response
-
+#--------------------------------------------------------------------------
 
 def operation_successful(response):
     """
@@ -110,6 +128,7 @@ def operation_successful(response):
         response.status_code = 201
         return response
     return response
+#--------------------------------------------------------------------------
 
 
 def invalid_token():
@@ -120,28 +139,3 @@ def invalid_token():
     response = jsonify({'Error': 'Invalid Token '})
     response.status_code = 400
     return response
-
-
-
-def decode_auth_token(auth_token):
-    """
-    Decodes the authorisation token
-    :param auth_token: 
-    :return: integer | String
-    """
-    try:
-        payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
-        return payload['sub']
-    except jwt.ExpiredSignature:
-        response = jsonify({'Signature expired. ': 'Please login again'})
-        response.status_code = 401
-        return response
-
-    except jwt.InvalidTokenError:
-        response = jsonify({'Error': 'Invalid token'})
-        response.status_code = 401
-        return response
-
-
-def get_token():
-    return decode_auth_token(request.headers.get("Authorization"))
