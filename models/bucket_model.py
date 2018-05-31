@@ -62,16 +62,17 @@ class BucketModal(object):
         :return: 
         """
         response = []
-        for this_bucket in bucket:
-            if this_bucket.bucket_id == bucket_id:
-                response.append({'id': this_bucket.bucket_id,
-                                 'name': this_bucket.name,
-                                 'description': this_bucket.desc,
-                                 'date_created': this_bucket.date,
-                                 'date modified': this_bucket.modify_date
+        for item in bucket:
+            if item.bucket_id == bucket_id:
+                response.append({'id': item.bucket_id,
+                                 'name': item.name,
+                                 'description': item.desc,
+                                 'date_created': item.date_created,
+                                 'date modified': item.modify_date
                                  })
                 return response
-            return None
+
+
 
     # ----------------------------------------------------------------------
     @staticmethod
