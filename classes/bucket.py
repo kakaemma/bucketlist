@@ -74,7 +74,7 @@ class Bucket(object):
             return response
 
         buckets = BucketModal.get_buckets()
-        response = jsonify(buckets)
+        response = jsonify({'Bucket List': buckets})
         response.status_code = 200
         return response
     #---------------------------------------------------------------------
@@ -93,12 +93,6 @@ class Bucket(object):
 
         check_for_buckets = BucketModal.check_for_buckets_available()
         if check_for_buckets == 0:
-            response = jsonify({'status': 'No buckets available'})
-            response.status_code = 400
-            return response
-
-        buckets = BucketModal.check_for_buckets_available()
-        if buckets == 0:
             response = jsonify({'status': 'No buckets available'})
             response.status_code = 400
             return response
