@@ -56,7 +56,7 @@ class Bucket(object):
             response.status_code = 200
             return response
 
-        response = jsonify({'Error': 'Failed to modify bucket '})
+        response = jsonify({'Error': 'Failed to modify bucket'})
         response.status_code = 400
         return response
     #---------------------------------------------------------------------
