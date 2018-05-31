@@ -25,8 +25,13 @@ class BucketModal(object):
         This methods adds the bucket 
         """
         bucket.append(self)
+        return self.id
 
     #-----------------------------------------------------------------------
+
+    @staticmethod
+    def check_for_buckets_available():
+        return len(bucket)
 
     @staticmethod
     def get_buckets():
@@ -92,3 +97,5 @@ class BucketModal(object):
         for this_bucket in bucket:
             if this_bucket.id == del_id:
                 bucket.remove(this_bucket)
+                deleted = 1
+                return deleted
