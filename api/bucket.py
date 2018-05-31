@@ -88,10 +88,47 @@ def add_bucket():
     except KeyError:
         invalid_keys()
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 @app.route('/buckets', methods=['GET'])
 def get_buckets():
+    """ 
+        This endpoints gets all buckets
+        """
+    try:
+        pass
+    except KeyError:
+        invalid_keys()
+
+#-------------------------------------------------------------------------
+
+
+@app.route('/buckets/<int:bucket_id>', methods=['GET'])
+def get_bucket(bucket_id):
+    """ 
+    This endpoints gets all buckets
+    """
+    try:
+        pass
+    except KeyError:
+        invalid_keys()
+#-------------------------------------------------------------------------
+
+
+@app.route('/buckets/<int:bucket_id>', methods=['PUT'])
+def modify_bucket(bucket_id):
+    """ 
+    This endpoints gets all buckets
+    """
+    try:
+        pass
+    except KeyError:
+        invalid_keys()
+#-------------------------------------------------------------------------
+
+
+@app.route('/buckets/<int:bucket_id>', methods=['DELETE'])
+def delete_bucket(bucket_id):
     """ 
     This endpoints gets all buckets
     """
