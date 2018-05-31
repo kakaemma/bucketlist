@@ -9,25 +9,24 @@ class TestBucket(unittest.TestCase):
         app.config.from_object(application_config['TestingEnv'])
         self.client = app.test_client()
 
-        # self.user = json.dumps({
-        #     'name': 'emma',
-        #     'email': '1234@gmail.com',
-        #     'password': '12345678'
-        # })
-        # response = self.client.post('/auth/register', data=self.user)
-        # json_data = json.loads(response.data.decode())
-        # self.token = json_data['token']
+        self.user = json.dumps({
+            'name': 'emma',
+            'email': '1234@gmail.com',
+            'password': '12345678'
+        })
+        response = self.client.post('/auth/register', data=self.user)
+        json_data = json.loads(response.data.decode())
+        self.token = json_data['token']
 
-    # def test_add_bucket_without_name(self):
-    #     bucket = json.dumps({
-    #         'name': '',
-    #         'desc': 'rally wins'
-    #     })
-    #     response = self.client.post('/buckets', data=bucket,
-    #                                 headers={"Authorization": self.token})
-    #     self.assertEquals(response.status_code, 400)
-    #     self.assertIn('Missing details', response.data.decode())
-    #     self.tearDown()
+    def test_add_bucket_without_name(self):
+        bucket = json.dumps({
+            'name': '',
+            'desc': 'rally wins'
+        })
+        response = self.client.post('/buckets', data=bucket})
+        self.assertEquals(response.status_code, 400)
+        self.assertIn('Missing details', response.data.decode())
+
 
 
     # def test_add_bucket_successfully(self):
