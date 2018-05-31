@@ -79,6 +79,7 @@ def add_bucket():
     """ 
     End point for adding bucket
     """
+    request.get_json(force=True)
     try:
         name = request.json['name']
         desc = request.json['desc']
@@ -96,7 +97,8 @@ def get_buckets():
         This endpoints gets all buckets
         """
     try:
-        pass
+        response  = Bucket.get_all_buckets()
+        return response
     except KeyError:
         invalid_keys()
 
@@ -109,7 +111,8 @@ def get_bucket(bucket_id):
     This endpoints gets all buckets
     """
     try:
-        pass
+        response = Bucket.get_single_bucket(bucket_id)
+        return response
     except KeyError:
         invalid_keys()
 #-------------------------------------------------------------------------
@@ -120,8 +123,12 @@ def modify_bucket(bucket_id):
     """ 
     This endpoints gets all buckets
     """
+    request.get_json(force=True)
     try:
-        pass
+        name = request.json['name']
+        desc = request.json['desc']
+        response = Bucket.modify_bucket(bucket_id, name, desc)
+        return response
     except KeyError:
         invalid_keys()
 #-------------------------------------------------------------------------
@@ -133,7 +140,8 @@ def delete_bucket(bucket_id):
     This endpoints gets all buckets
     """
     try:
-        pass
+        response = Bucket.delete_bucket_from_bucket_list(bucket_id)
+        return response
     except KeyError:
         invalid_keys()
 #-------------------------------------------------------------------------
