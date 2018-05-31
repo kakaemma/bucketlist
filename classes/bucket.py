@@ -1,6 +1,7 @@
 from flask import jsonify
 from models.bucket_model import BucketModal
 
+
 class Bucket(object):
 
     @classmethod
@@ -16,21 +17,20 @@ class Bucket(object):
             response.status_code = 400
             return response
 
+        bucket = BucketModal(name, desc)
+        bucket.create_bucket()
 
-        add_bucket = BucketModal(name, desc)
-        if add_bucket:
-            response = jsonify({
-                'message': 'Bucket " ' + name + ' " added',
+        response = jsonify({
+                'message': 'Bucket ' + name + ' added',
                 'id': 'user_id'
-            })
-            response.status_code = 201
-            return response
-
-        response = jsonify({'status': 'Failed'})
-        response.status_code = 400
+        })
+        response.status_code = 201
         return response
 
-    def modify_bucket(cls, edit_id, name, desc):
+    #---------------------------------------------------------------------
+
+    @staticmethod
+    def modify_bucket(edit_id, name, desc):
         """
         This method validates and controls editing an existing bucket
         :param edit_id: 
@@ -45,7 +45,7 @@ class Bucket(object):
 
         bucket_available = BucketModal.check_for_buckets_available()
         if bucket_available == 0:
-            response = jsonify({'status': 'No buckets available' })
+            response = jsonify({'status': 'No buckets available'})
             response.status_code = 400
             return response
 
@@ -59,6 +59,7 @@ class Bucket(object):
         response = jsonify({'Error': 'Failed to modify bucket '})
         response.status_code = 400
         return response
+    #---------------------------------------------------------------------
 
     @staticmethod
     def get_all_buckets():
@@ -68,16 +69,15 @@ class Bucket(object):
         """
         bucket_available = BucketModal.check_for_buckets_available()
         if bucket_available == 0:
-            response = jsonify({'status': 'No buckets available' })
+            response = jsonify({'status': 'No buckets available'})
             response.status_code = 400
             return response
+
         buckets = BucketModal.get_buckets()
-        response = jsonify({
-            'Status': 'Buckets retrieved',
-            'Bucket list': buckets
-        })
+        response = jsonify(buckets)
         response.status_code = 200
         return response
+    #---------------------------------------------------------------------
 
     @staticmethod
     def get_single_bucket(bucket_id):
@@ -115,6 +115,7 @@ class Bucket(object):
         response = jsonify({'status': 'Bucket does not exist'})
         response.status_code = 404
         return response
+    #---------------------------------------------------------------------
 
     @staticmethod
     def delete_bucket_from_bucket_list(bucket_id):
@@ -147,7 +148,3 @@ class Bucket(object):
         })
         response.status_code = 404
         return response
-
-
-
-
