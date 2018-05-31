@@ -12,10 +12,10 @@ class BucketModal(object):
         :param name: 
         :param desc: 
         """
-        self.id = len(bucket)+1
+        self.bucket_id = len(bucket)+1
         self.name = name
         self.desc = desc
-        self.date = datetime.datetime.utcnow()
+        self.date_created = datetime.datetime.utcnow()
         self.modify_date = None
 
     #-----------------------------------------------------------------------
@@ -25,7 +25,7 @@ class BucketModal(object):
         This methods adds the bucket 
         """
         bucket.append(self)
-        return self.id
+        return self.bucket_id
 
     #-----------------------------------------------------------------------
 
@@ -38,15 +38,19 @@ class BucketModal(object):
         """ 
         This method gets all the buckets
         """
-        response = []
-        for each_bucket in bucket:
-            response.append({'id': each_bucket.id,
-                             'name': each_bucket.name,
-                             'description': each_bucket.desc,
-                             'date_created': each_bucket.date,
-                             'date_modified': each_bucket.modify_date
+        buckets_list = []
+
+        for item in bucket:
+
+            buckets_list.append({'id': item.bucket_id,
+                             'name': item.name,
+                             'desc': item.desc,
+                             'date_created': item.date_created,
+                             'date_modified': item.modify_date,
                              })
-            return response
+        return buckets_list
+
+
 
     #-----------------------------------------------------------------------
 
@@ -59,8 +63,8 @@ class BucketModal(object):
         """
         response = []
         for this_bucket in bucket:
-            if this_bucket.id == bucket_id:
-                response.append({'id': this_bucket.id,
+            if this_bucket.bucket_id == bucket_id:
+                response.append({'id': this_bucket.bucket_id,
                                  'name': this_bucket.name,
                                  'description': this_bucket.desc,
                                  'date_created': this_bucket.date,
@@ -80,22 +84,23 @@ class BucketModal(object):
         :return: 
         """
         for this_bucket in bucket:
-            if this_bucket.id == modify_id:
+            if this_bucket.bucket_id == modify_id:
                 this_bucket.name = name
                 this_bucket.desc = desc
                 this_bucket.modify_date = datetime.datetime.utcnow()
-                return this_bucket.id
+                return this_bucket.bucket_id
             return None
     #-----------------------------------------------------------------------
 
-    def delete_bucket(cls, del_id):
+    @staticmethod
+    def delete_bucket(del_id):
         """
         This method deletes a bucket from the system
         :param del_id: 
         :return: 
         """
         for this_bucket in bucket:
-            if this_bucket.id == del_id:
+            if this_bucket.bucket_id == del_id:
                 bucket.remove(this_bucket)
                 deleted = 1
                 return deleted
