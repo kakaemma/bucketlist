@@ -105,3 +105,11 @@ class BucketModal(object):
                 bucket.remove(this_bucket)
                 deleted = 1
                 return deleted
+
+    #---------------------------------------------------------------------
+    @staticmethod
+    def get_bucket_by_name(bucket_name):
+        for item in bucket:
+            if item.name == bucket_name:
+                return item.name
+
