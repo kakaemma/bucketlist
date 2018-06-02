@@ -14,36 +14,48 @@ class TestBucket(unittest.TestCase):
             'email': '1234@gmail.com',
             'password': '12345678'
         })
+        self.bucket = json.dumps({
+            'name': 'Adventure',
+            'desc': 'Touring'
+        })
+        self.bucket_conf = json.dumps({
+            'name': 'Rally',
+            'desc': 'Rally'
+        })
         response = self.client.post('/auth/register', data=self.user)
-        json_data = json.loads(response.data.decode())
-        self.token = json_data['token']
 
     def test_add_bucket_without_name(self):
         bucket = json.dumps({
             'name': '',
             'desc': 'rally wins'
         })
-        response = self.client.post('/buckets', data=bucket})
+        response = self.client.post('/buckets', data=bucket)
         self.assertEquals(response.status_code, 400)
         self.assertIn('Missing details', response.data.decode())
 
+    def test_add_bucket_successfully(self):
+        bucket = json.dumps({
+            'name': 'Adventure',
+            'desc': 'Rallying'
+        })
+        response = self.client.post('/buckets', data=bucket)
+        self.assertEquals(response.status_code, 201)
+        self.assertIn('Bucket', response.data.decode())
+
+    def test_add_bucket_with_existing_bucket(self):
+
+        self.client.post('/buckets', data=self.bucket_conf)
+        response = self.client.post('/buckets', data=self.bucket_conf)
+        self.assertEquals(response.status_code, 409)
+        self.assertIn('Bucket already exists', response.data.decode())
 
 
-    # def test_add_bucket_successfully(self):
-    #     new_bucket = json.dumps({
-    #         'name': 'Adventure',
-    #         'desc': 'Rallying'
-    #     })
-    #     response = self.client.post('/buckets', data=new_bucket,
-    #                                 headers={"Authorization": self.token})
-    #     self.assertEquals(response.status_code, 201)
-    #     self.assertIn('Bucket', response.data.decode())
-    #     self.tearDown()
+    def test_get_all_buckets_on_empty_bucket_list(self):
+        self.tearDown()
+        response = self.client.get('/buckets')
+        self.assertEquals(response.status_code, 404)
+        self.assertIn('No buckets available', response.data.decode())
 
-    def tearDown(self):
-        self.user =None
-        self.token = None
-        self.client = None
 
 
     if __name__ == '__main__':
