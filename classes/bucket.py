@@ -17,15 +17,24 @@ class Bucket(object):
             response.status_code = 400
             return response
 
-        bucket = BucketModal(name, desc)
-        bucket.create_bucket()
+        check_bucket = BucketModal.get_bucket_by_name(name)
+        if check_bucket:
+            response = jsonify({
+                'Conflict': 'Bucket already exists'
+            })
+            response.status_code = 409
+            return response
 
-        response = jsonify({
-                'message': 'Bucket ' + name + ' added',
-                'id': 'user_id'
-        })
-        response.status_code = 201
-        return response
+        if not check_bucket:
+            bucket = BucketModal(name, desc)
+            bucket.create_bucket()
+
+            response = jsonify({
+                    'message': 'Bucket ' + name + ' added',
+                    'id': 'user_id'
+            })
+            response.status_code = 201
+            return response
 
     #---------------------------------------------------------------------
 
@@ -68,15 +77,19 @@ class Bucket(object):
         :return: 
         """
         bucket_available = BucketModal.check_for_buckets_available()
-        if bucket_available == 0:
+        if bucket_available :
             response = jsonify({'status': 'No buckets available'})
-            response.status_code = 400
+            response.status_code = 404
             return response
 
-        buckets = BucketModal.get_buckets()
-        response = jsonify({'Bucket List': buckets})
-        response.status_code = 200
-        return response
+        if  bucket_available !=0:
+            buckets = BucketModal.get_buckets()
+            response = jsonify({'Bucket List': buckets})
+            response.status_code = 200
+            return response
+
+        # if bucket_available !=0:
+
     #---------------------------------------------------------------------
 
     @staticmethod
