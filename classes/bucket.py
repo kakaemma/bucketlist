@@ -105,13 +105,14 @@ class Bucket(object):
             return response
 
         check_for_buckets = BucketModal.check_for_buckets_available()
-        if check_for_buckets == 0:
-            response = jsonify({'status': 'No buckets available'})
-            response.status_code = 400
-            return response
+        print(check_for_buckets)
+        if check_for_buckets:
+            single_bucket = BucketModal.get_bucket(bucket_id)
+            if not single_bucket:
+                response = jsonify({'status': 'Bucket does not exist'})
+                response.status_code = 404
+                return response
 
-        single_bucket = BucketModal.get_bucket(bucket_id)
-        if single_bucket:
             response = jsonify({
                 'status': 'Bucket retrieved',
                 'Bucket': single_bucket
@@ -119,9 +120,14 @@ class Bucket(object):
             response.status_code = 200
             return response
 
-        response = jsonify({'status': 'Bucket does not exist'})
-        response.status_code = 404
+        response = jsonify({'status': 'No bucket list added'})
+        response.status_code = 400
         return response
+
+
+
+
+
     #---------------------------------------------------------------------
 
     @staticmethod
