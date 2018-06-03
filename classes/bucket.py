@@ -77,20 +77,21 @@ class Bucket(object):
         :return: 
         """
         bucket_available = BucketModal.check_for_buckets_available()
-        if bucket_available :
-            response = jsonify({'status': 'No buckets available'})
-            response.status_code = 404
-            return response
-
-        if  bucket_available !=0:
+        if  bucket_available :
             buckets = BucketModal.get_buckets()
             response = jsonify({'Bucket List': buckets})
             response.status_code = 200
+            print(bucket_available)
             return response
 
-        # if bucket_available !=0:
+        response = jsonify({'status': 'No buckets available'})
+        response.status_code = 404
+        return response
 
-    #---------------------------------------------------------------------
+
+
+
+     #---------------------------------------------------------------------
 
     @staticmethod
     def get_single_bucket(bucket_id):
