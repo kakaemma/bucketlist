@@ -9,6 +9,7 @@ class TestBucket(unittest.TestCase):
         app.config.from_object(application_config['TestingEnv'])
         self.client = app.test_client()
 
+
         self.bucket = json.dumps({
             'name': 'Adventure',
             'desc': 'Rallying'
@@ -48,6 +49,7 @@ class TestBucket(unittest.TestCase):
         self.assertEquals(response.status_code, 201)
         self.assertIn('Bucket', response.data.decode())
 
+
     def test_add_bucket_with_existing_bucket(self):
 
         self.client.post('/buckets', data=self.bucket_conf)
@@ -57,16 +59,17 @@ class TestBucket(unittest.TestCase):
         self.tearDown()
 
 
-    def test_get_all_buckets_on_empty_bucket_list(self):
-        response = self.client.get('/buckets')
-        self.assertEquals(response.status_code, 404)
-        self.assertIn('No buckets available', response.data.decode())
+    # def test_get_all_buckets_on_empty_bucket_list(self):
+    #     response = self.client.get('/buckets')
+    #     self.assertEquals(response.status_code, 404)
+    #     self.assertIn('No buckets available', response.data.decode())
 
     def test_get_single_bucket_with_no_id(self):
         self.tearDown()
         response = self.client.get('/buckets/0')
         self.assertEquals(response.status_code, 400)
         self.assertIn('Bucket id missing', response.data.decode())
+        self.tearDown()
 
     # def test_get_single_bucket_with_no_bucket_list(self):
     #     self.tearDown()
@@ -92,7 +95,12 @@ class TestBucket(unittest.TestCase):
         self.tearDown()
 
     def tearDown(self):
-        bucket = []
+       from models.bucket_model import bucket
+       self.buck = bucket
+       self.buck =[]
+       bucket = self.buck
+
+
 
 
 
