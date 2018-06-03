@@ -31,7 +31,8 @@ class BucketModal(object):
 
     @staticmethod
     def check_for_buckets_available():
-        return len(bucket)
+        if len(bucket) >=1:
+            return len(bucket)
 
     @staticmethod
     def get_buckets():
