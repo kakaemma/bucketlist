@@ -70,9 +70,18 @@ class Item(object):
 
         if not bucket_exist:
             response = jsonify(
-                {'Error': 'Attempting to modify item on no existing bucket'
+                {'Error': 'Attempting to modify item on non existing bucket'
                  })
             response.status_code = 400
             return response
+
+        item = BucketItems.check_item_with_id(item_id)
+        if not item:
+            response = jsonify(
+                {'Error': 'Attempting to modify item on non existing item'
+                 })
+            response.status_code = 400
+            return response
+
 
 
