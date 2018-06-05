@@ -171,6 +171,14 @@ def edit_item(bucket_id, item_id):
     except KeyError:
         invalid_keys()
 
+@app.route('/buckets/<int:bucket_id>/items/<int:item_id>', methods=['DELETE'])
+def delete_item(bucket_id, item_id):
+    try:
+        response = Item.delete_item(bucket_id, item_id)
+        return response
+    except KeyError:
+        invalid_keys()
+
 
 @app.route('/auth/logout', methods=['POST'])
 def logout():
