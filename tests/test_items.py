@@ -88,6 +88,16 @@ class TestItem(unittest.TestCase):
         self.assertIn('Attempting to modify item on non existing item',
                       response.data.decode())
 
+    def test_modify_item_successfully(self):
+        self.client.post('/buckets', data=self.bucket)
+        self.client.post('/buckets/1/items',
+                                    data=self.item)
+        response = self.client.put('/buckets/1/items/1',
+                                   data=self.item_edit)
+        self.assertEquals(response.status_code, 200)
+        self.assertIn('Item successfully updated',
+                      response.data.decode())
+
 
 
 
