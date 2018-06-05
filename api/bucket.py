@@ -29,8 +29,6 @@ def register():
         name = request.json['name']
         password = request.json['password']
         response = Authenticate.register(name, email, password)
-        response = operation_successful(response)
-
         return response
 
     except KeyError:
@@ -48,8 +46,6 @@ def login():
         email = request.json['email']
         password = request.json['password']
         response = Authenticate.login(email, password)
-        print(response)
-        response = operation_successful(response)
         return response
     except KeyError:
         invalid_keys()
@@ -67,7 +63,6 @@ def reset_password():
         old_pass = request.json['password']
         new_pass = request.json['new_password']
         response = Authenticate.reset_password(email, old_pass, new_pass)
-        response = operation_successful(response)
         return response
 
     except KeyError:
@@ -85,7 +80,6 @@ def add_bucket():
         name = request.json['name']
         desc = request.json['desc']
         response = Bucket.add_bucket(name, desc)
-        response = operation_successful(response)
         return response
     except KeyError:
         invalid_keys()
