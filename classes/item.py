@@ -49,9 +49,9 @@ class Item(object):
     #-----------------------------------------------------------------------
 
     @classmethod
-    def edit_item(cls, bucket_id, name, status, item_id, user_id=1):
+    def edit_item(cls, bucket_id, new_name, new_status, item_id, user_id=1):
 
-        if not bucket_id or not name or not status \
+        if not bucket_id or not new_name or not new_status \
                 or not item_id or not user_id:
             response = jsonify({'Error': 'Missing details'})
             response.status_code = 400
@@ -82,6 +82,15 @@ class Item(object):
                  })
             response.status_code = 400
             return response
+
+        edit_item = BucketItems.update_item(bucket_id, item_id, new_name, new_status)
+        if edit_item:
+            response = jsonify(
+                {'Error': 'Item successfully updated'
+                 })
+            response.status_code = 200
+            return response
+
 
 
 
