@@ -75,7 +75,17 @@ class TestItem(unittest.TestCase):
         response = self.client.put('/buckets/2/items/1',
                                    data=self.item_edit)
         self.assertEquals(response.status_code, 400)
-        self.assertIn('Attempting to modify item on no existing bucket',
+        self.assertIn('Attempting to modify item on non existing bucket',
+                      response.data.decode())
+
+    def test_modify_item_on_non_existing_item(self):
+        self.client.post('/buckets', data=self.bucket)
+        self.client.post('/buckets/1/items',
+                                    data=self.item)
+        response = self.client.put('/buckets/1/items/3',
+                                   data=self.item_edit)
+        self.assertEquals(response.status_code, 400)
+        self.assertIn('Attempting to modify item on non existing item',
                       response.data.decode())
 
 
