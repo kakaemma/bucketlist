@@ -144,7 +144,7 @@ class Bucket(object):
             return response
 
         bucket_list = BucketModal.check_for_buckets_available()
-        if bucket_list == 0:
+        if not bucket_list:
             response = jsonify({
                 'status': 'Can not delete on empty Bucket list'
             })
