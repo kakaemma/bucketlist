@@ -157,6 +157,20 @@ def add_item(bucket_id):
         return response
     except KeyError:
         invalid_keys()
+#---------------------------------------------------------------------------
+
+@app.route('/buckets/<int:bucket_id>/items/<int:item_id>', methods=['PUT'])
+def edit_item(bucket_id, item_id):
+    request.get_json(force=True)
+    try:
+        name = request.json['name']
+        status = request.json['status']
+        response = Item.edit_item(bucket_id, name, status, item_id,)
+        return response
+
+    except KeyError:
+        invalid_keys()
+
 
 @app.route('/auth/logout', methods=['POST'])
 def logout():
