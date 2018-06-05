@@ -124,10 +124,28 @@ class TestBucket(unittest.TestCase):
     def test_modify_bucket_successfully(self):
         """ Should return successfully modified bucket"""
         self.client.post('/buckets', data=self.bucket)
-        response = self.client.put('/buckets/1', data=self.bucket_mod_final)
+        response = self.client.put('/buckets/1',
+                                   data=self.bucket_mod_final)
         self.assertEquals(response.status_code, 200)
         self.assertIn('Bucket successfully modified',
                       response.data.decode())
+
+    def test_delete_bucket_on_empty_bucket_list(self):
+        """ Should return can not delete on empty bucket list"""
+        response = self.client.delete('buckets/1')
+        self.assertEquals(response.status_code, 400)
+        self.assertIn('Can not delete on empty Bucket list',
+                      response.data.decode())
+
+    def test_delete_bucket_successfully(self):
+        """ Should return bucket successfully deleted"""
+        self.client.post('/buckets', data=self.bucket)
+        response = self.client.delete('buckets/1')
+        self.assertEquals(response.status_code, 200)
+        self.assertIn('Bucket successfully deleted',
+                      response.data.decode())
+
+
 
     def tearDown(self):
         from models.bucket_model import BucketModal
