@@ -145,8 +145,6 @@ class TestBucket(unittest.TestCase):
         self.assertIn('Bucket successfully deleted',
                       response.data.decode())
 
-
-
     def tearDown(self):
         from models.bucket_model import BucketModal
         BucketModal.bucket =[]
