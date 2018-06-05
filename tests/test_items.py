@@ -12,6 +12,10 @@ class TestItem(unittest.TestCase):
             'name': 'music',
             'status': 'pending'
         })
+        self.item_edit = json.dumps({
+            'name': 'music playing',
+            'status': 'done'
+        })
         self.item_empty = json.dumps({
             'name': '',
             'status': ''
@@ -48,6 +52,33 @@ class TestItem(unittest.TestCase):
         self.assertEquals(response.status_code, 201)
         self.assertIn('Bucket item successfully added',
                       response.data.decode())
+
+    def test_modify_item_with_empty_values(self):
+        self.client.post('/buckets', data=self.bucket)
+        response = self.client.put('/buckets/1/items/1',
+                                    data=self.item_empty)
+        self.assertEquals(response.status_code, 400)
+        self.assertIn('Missing details',
+                      response.data.decode())
+
+    def test_modify_item_on_empty_bucket(self):
+        response = self.client.put('/buckets/1/items/1',
+                                    data=self.item_edit)
+        self.assertEquals(response.status_code, 400)
+        self.assertIn('Can not edit item on empty bucket list',
+                      response.data.decode())
+
+    def test_modify_item_on_non_existing_bucket(self):
+        self.client.post('/buckets', data=self.bucket)
+        self.client.post('/buckets/1/items',
+                                    data=self.item)
+        response = self.client.put('/buckets/2/items/1',
+                                   data=self.item_edit)
+        self.assertEquals(response.status_code, 400)
+        self.assertIn('Attempting to modify item on no existing bucket',
+                      response.data.decode())
+
+
 
 
     def tearDown(self):
