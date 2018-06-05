@@ -53,7 +53,7 @@ class Bucket(object):
             return response
 
         bucket_available = BucketModal.check_for_buckets_available()
-        if bucket_available == 0:
+        if not bucket_available:
             response = jsonify({'status': 'No buckets available'})
             response.status_code = 400
             return response
@@ -65,7 +65,7 @@ class Bucket(object):
             response.status_code = 200
             return response
 
-        response = jsonify({'Error': 'Failed to modify bucket'})
+        response = jsonify({'Error': 'Bucket name can not be the same'})
         response.status_code = 400
         return response
     #---------------------------------------------------------------------
