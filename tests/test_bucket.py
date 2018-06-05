@@ -40,7 +40,6 @@ class TestBucket(unittest.TestCase):
             'name': 'FootBall',
             'desc': 'Winners'
         })
-        # response = self.client.post('/auth/register', data=self.user)
 
     def test_get_all_buckets_on_empty_bucket_list(self):
         """ Test get all buckets when bucket list is empty"""
