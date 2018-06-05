@@ -40,6 +40,7 @@ class TestBucket(unittest.TestCase):
             'name': 'FootBall',
             'desc': 'Winners'
         })
+        # response = self.client.post('/auth/register', data=self.user)
 
     def test_get_all_buckets_on_empty_bucket_list(self):
         """ Test get all buckets when bucket list is empty"""
@@ -143,6 +144,8 @@ class TestBucket(unittest.TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertIn('Bucket successfully deleted',
                       response.data.decode())
+
+
 
     def tearDown(self):
         from models.bucket_model import BucketModal
