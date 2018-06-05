@@ -32,6 +32,7 @@ class BucketItems(object):
 
     #-----------------------------------------------------------------------
 
+    @classmethod
     def update_item(cls, bucket_id, item_id, new_name, new_status):
         """
         This method updates an item
@@ -42,7 +43,7 @@ class BucketItems(object):
         :return: 
         """
         for each_item in BucketItems.items:
-            if each_item.bucket_id == bucket_id and each_item.id == item_id:
+            if each_item.id == bucket_id and each_item.id == item_id:
                 each_item.name = new_name
                 each_item.status = new_status
                 return each_item.id
