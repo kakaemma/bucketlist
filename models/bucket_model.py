@@ -1,18 +1,20 @@
 import datetime
-bucket = []
+# bucket = []
 
 
 class BucketModal(object):
+    bucket = []
     """
     This class handle all model operations on th bucket
     """
     def __init__(self, name, desc):
+
         """
         This Constructor initialises all the parameter required
         :param name: 
         :param desc: 
         """
-        self.bucket_id = len(bucket)+1
+        self.bucket_id = len(BucketModal.bucket)+1
         self.name = name
         self.desc = desc
         self.date_created = datetime.datetime.utcnow()
@@ -24,15 +26,15 @@ class BucketModal(object):
         """ 
         This methods adds the bucket 
         """
-        bucket.append(self)
+        BucketModal.bucket.append(self)
         return self.bucket_id
 
     #-----------------------------------------------------------------------
 
     @staticmethod
     def check_for_buckets_available():
-        if len(bucket) >=1:
-            return len(bucket)
+        if len(BucketModal.bucket) >=1:
+            return len(BucketModal.bucket)
 
     @staticmethod
     def get_buckets():
@@ -41,7 +43,7 @@ class BucketModal(object):
         """
         buckets_list = []
 
-        for item in bucket:
+        for item in BucketModal.bucket:
 
             buckets_list.append({'id': item.bucket_id,
                              'name': item.name,
@@ -63,7 +65,7 @@ class BucketModal(object):
         :return: 
         """
         response = []
-        for item in bucket:
+        for item in BucketModal.bucket:
             if item.bucket_id == bucket_id:
                 response.append({'id': item.bucket_id,
                                  'name': item.name,
@@ -85,7 +87,7 @@ class BucketModal(object):
         :param desc: 
         :return: 
         """
-        for this_bucket in bucket:
+        for this_bucket in BucketModal.bucket:
             if this_bucket.bucket_id == modify_id:
                 this_bucket.name = name
                 this_bucket.desc = desc
@@ -101,16 +103,16 @@ class BucketModal(object):
         :param del_id: 
         :return: 
         """
-        for this_bucket in bucket:
+        for this_bucket in BucketModal.bucket:
             if this_bucket.bucket_id == del_id:
-                bucket.remove(this_bucket)
+                BucketModal.bucket.remove(this_bucket)
                 deleted = 1
                 return deleted
 
     #---------------------------------------------------------------------
     @staticmethod
     def get_bucket_by_name(bucket_name):
-        for item in bucket:
+        for item in BucketModal.bucket:
             if item.name == bucket_name:
                 return item.name
 
