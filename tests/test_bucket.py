@@ -35,6 +35,38 @@ class TestBucket(unittest.TestCase):
         })
         response = self.client.post('/auth/register', data=self.user)
 
+    def test_get_all_buckets_on_empty_bucket_list(self):
+        response = self.client.get('/buckets')
+        self.assertEquals(response.status_code, 404)
+        self.assertIn('No buckets available', response.data.decode())
+
+    def test_get_single_bucket_with_no_id(self):
+        self.tearDown()
+        response = self.client.get('/buckets/0')
+        self.assertEquals(response.status_code, 400)
+        self.assertIn('Bucket id missing', response.data.decode())
+        self.tearDown()
+
+    def test_get_single_bucket_with_no_bucket_list(self):
+        self.tearDown()
+        response = self.client.get('/buckets/1')
+        self.assertEquals(response.status_code, 400)
+        self.assertIn('No bucket list added', response.data.decode())
+
+
+    def test_get_single_bucket_that_does_not_exist(self):
+        self.tearDown()
+        self.client.post('/buckets', data=self.bucket2)
+        response = self.client.get('/buckets/45')
+        self.assertEquals(response.status_code, 404)
+        self.assertIn('Bucket does not exist', response.data.decode())
+
+    def test_get_single_bucket_successfully(self):
+        self.client.post('/buckets', data=self.bucket2)
+        response = self.client.get('/buckets/1')
+        self.assertEquals(response.status_code, 200)
+        self.assertIn('Bucket', response.data.decode())
+
     def test_add_bucket_without_name(self):
         bucket = json.dumps({
             'name': '',
@@ -59,51 +91,11 @@ class TestBucket(unittest.TestCase):
         self.tearDown()
 
 
-    # def test_get_all_buckets_on_empty_bucket_list(self):
-    #     response = self.client.get('/buckets')
-    #     self.assertEquals(response.status_code, 404)
-    #     self.assertIn('No buckets available', response.data.decode())
 
-    def test_get_single_bucket_with_no_id(self):
-        self.tearDown()
-        response = self.client.get('/buckets/0')
-        self.assertEquals(response.status_code, 400)
-        self.assertIn('Bucket id missing', response.data.decode())
-        self.tearDown()
-
-    # def test_get_single_bucket_with_no_bucket_list(self):
-    #     self.tearDown()
-    #     response = self.client.get('/buckets/1')
-    #     self.assertEquals(response.status_code, 400)
-    #     self.assertIn('No bucket list added', response.data.decode())
-
-
-    def test_get_single_bucket_that_does_not_exist(self):
-        self.tearDown()
-        self.client.post('/buckets', data=self.bucket2)
-        response = self.client.get('/buckets/45')
-        self.assertEquals(response.status_code, 404)
-        self.assertIn('Bucket does not exist', response.data.decode())
-        self.tearDown()
-
-    def test_get_single_bucket_successfully(self):
-        self.tearDown()
-        self.client.post('/buckets', data=self.bucket2)
-        response = self.client.get('/buckets/1')
-        self.assertEquals(response.status_code, 200)
-        self.assertIn('Bucket', response.data.decode())
-        self.tearDown()
 
     def tearDown(self):
-       from models.bucket_model import bucket
-       self.buck = bucket
-       self.buck =[]
-       bucket = self.buck
-
-
-
-
-
+        from models.bucket_model import BucketModal
+        BucketModal.bucket =[]
 
     if __name__ == '__main__':
         unittest.main()
