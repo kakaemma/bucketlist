@@ -1,11 +1,11 @@
 import datetime
-items = []
 
 
 class BucketItems(object):
     """
     This class handles all models operations for the Bucket items
     """
+    items = []
 
     def __init__(self, user_id, bucket_id, name, status):
         """
@@ -15,7 +15,7 @@ class BucketItems(object):
         :param name: 
         :param status: 
         """
-        self.id = len(items)+1
+        self.id = len(BucketItems.items)+1
         self.user_id = user_id
         self.name = name
         self.status = status
@@ -28,7 +28,7 @@ class BucketItems(object):
         """ 
         This adds an item to the model
         """
-        items.append(self)
+        BucketItems.items.append(self)
 
     #-----------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ class BucketItems(object):
         :param new_status: 
         :return: 
         """
-        for each_item in items:
+        for each_item in BucketItems.items:
             if each_item.bucket_id == bucket_id and each_item.id == item_id:
                 each_item.name = new_name
                 each_item.status = new_status
@@ -55,6 +55,6 @@ class BucketItems(object):
         :param item_id: 
         :return: 
         """
-        for this_item in items:
+        for this_item in BucketItems.items:
             if this_item.id == item_id:
-                items.remove(this_item)
+                BucketItems.items.remove(this_item)
