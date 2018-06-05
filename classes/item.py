@@ -46,4 +46,33 @@ class Item(object):
             response = jsonify({'status': 'Bucket item successfully added'})
             response.status_code = 201
             return response
+    #-----------------------------------------------------------------------
+
+    @classmethod
+    def edit_item(cls, bucket_id, name, status, item_id, user_id=1):
+
+        if not bucket_id or not name or not status \
+                or not item_id or not user_id:
+            response = jsonify({'Error': 'Missing details'})
+            response.status_code = 400
+            return response
+
+        bucket = BucketModal.check_for_buckets_available()
+
+        if not bucket:
+            response = jsonify({
+                'Error': 'Can not edit item on empty bucket list'
+            })
+            response.status_code = 400
+            return response
+
+        bucket_exist = BucketModal.check_bucket_with_id(bucket_id)
+
+        if not bucket_exist:
+            response = jsonify(
+                {'Error': 'Attempting to modify item on no existing bucket'
+                 })
+            response.status_code = 400
+            return response
+
 
