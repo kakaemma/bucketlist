@@ -50,14 +50,15 @@ class BucketItems(object):
 
     #-----------------------------------------------------------------------
 
-    def delete_item(cls, item_id):
+    @classmethod
+    def delete_item(cls, bucket_id, item_id):
         """
         This method deletes an item
         :param item_id: 
         :return: 
         """
         for this_item in BucketItems.items:
-            if this_item.id == item_id:
+            if this_item.id == item_id and this_item.bucket_id == bucket_id:
                 BucketItems.items.remove(this_item)
 
     #-----------------------------------------------------------------------
