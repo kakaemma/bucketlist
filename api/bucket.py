@@ -189,11 +189,3 @@ def invalid_keys():
     return response
 #--------------------------------------------------------------------------
 
-def invalid_token():
-    """
-    Handles invalid tokens
-    :return: String
-    """
-    response = jsonify({'Error': 'Invalid Token '})
-    response.status_code = 400
-    return response
