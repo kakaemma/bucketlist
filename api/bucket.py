@@ -2,6 +2,7 @@ from flask import jsonify, request, json, render_template
 from api import create_app
 from classes.auth import Authenticate
 from classes.bucket import Bucket
+from classes.item import Item
 from utility.utility import validate_content_type, validate_token
 
 
@@ -145,6 +146,17 @@ def delete_bucket(bucket_id):
     except KeyError:
         invalid_keys()
 #-------------------------------------------------------------------------
+
+@app.route('/buckets/<int:bucket_id>/items', methods=['POST'])
+def add_item(bucket_id):
+    request.get_json(force=True)
+    try:
+        name = request.json['name']
+        status = request.json['status']
+        response = Item.add_item(name, status, bucket_id)
+        return response
+    except KeyError:
+        invalid_keys()
 
 @app.route('/auth/logout', methods=['POST'])
 def logout():
