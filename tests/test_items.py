@@ -98,6 +98,43 @@ class TestItem(unittest.TestCase):
         self.assertIn('Item successfully updated',
                       response.data.decode())
 
+    def test_delete_item_with_no_bucket_list(self):
+        response = self.client.delete('/buckets/1/items/1')
+        self.assertEquals(response.status_code, 400)
+        self.assertIn('Can not delete item on empty bucket list',
+                      response.data.decode())
+
+    def test_delete_item_with_wrong_id(self):
+        self.client.post('/buckets', data=self.bucket)
+        self.client.post('/buckets/1/items',
+                                    data=self.item)
+        response = self.client.delete('/buckets/1/items/2')
+        self.assertEquals(response.status_code, 400)
+        self.assertIn('Attempting to delete non existing item',
+                      response.data.decode())
+
+    def test_delete_item_with_non_existing_bucket(self):
+        """ Should return error on non existing bucket"""
+        self.client.post('/buckets', data=self.bucket)
+        self.client.post('/buckets/1/items',
+                                    data=self.item)
+        response = self.client.delete('/buckets/2/items/1')
+        self.assertEquals(response.status_code, 400)
+        self.assertIn('Attempting to delete item on non existing bucket',
+                      response.data.decode())
+
+    def test_delete_item_successfully(self):
+        """ Should return item successfully deleted"""
+        self.client.post('/buckets', data=self.bucket)
+        self.client.post('/buckets/1/items',
+                                    data=self.item)
+        response = self.client.delete('/buckets/1/items/1')
+        self.assertEquals(response.status_code, 200)
+        self.assertIn('Item successfully deleted', response.data.decode())
+
+
+
+
 
 
 
