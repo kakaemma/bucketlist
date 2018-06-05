@@ -58,3 +58,11 @@ class BucketItems(object):
         for this_item in BucketItems.items:
             if this_item.id == item_id:
                 BucketItems.items.remove(this_item)
+
+    #-----------------------------------------------------------------------
+
+    @classmethod
+    def check_item_with_id(cls,item_id):
+        for this_item in BucketItems.items:
+            if this_item.id == item_id:
+                return item_id
