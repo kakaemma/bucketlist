@@ -89,11 +89,12 @@ class BucketModal(object):
         """
         for this_bucket in BucketModal.bucket:
             if this_bucket.bucket_id == modify_id:
+                if this_bucket.name == name:
+                    return None
                 this_bucket.name = name
                 this_bucket.desc = desc
                 this_bucket.modify_date = datetime.datetime.utcnow()
                 return this_bucket.bucket_id
-            return None
     #-----------------------------------------------------------------------
 
     @staticmethod
