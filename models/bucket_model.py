@@ -3,10 +3,12 @@ import datetime
 
 
 class BucketModal(object):
-    bucket = []
+
     """
     This class handle all model operations on th bucket
     """
+    bucket = []
+
     def __init__(self, name, desc):
 
         """
@@ -35,6 +37,13 @@ class BucketModal(object):
     def check_for_buckets_available():
         if len(BucketModal.bucket) >=1:
             return len(BucketModal.bucket)
+
+    #-----------------------------------------------------------------------
+    @classmethod
+    def check_bucket_with_id(cls,bucket_id):
+        for this_bucket in BucketModal.bucket:
+            if this_bucket.bucket_id == bucket_id:
+                return bucket_id
 
     @staticmethod
     def get_buckets():
