@@ -1,12 +1,11 @@
-from api.bucket import *
 from functools import wraps
 from flask import request, jsonify
 from models.users import UserModal
 import datetime
 import jwt
 #
-# from api.bucket import app ( When i use this import, there is an error)
-# from api.bucket import * ( this makes everything fine but its importing everything
+# from api.bucket import app
+from api.bucket import *
 
 
 
@@ -96,7 +95,7 @@ def encode_auth_token(user_id):
 
         auth_token = jwt.encode(
             payload,
-            app.config.get('SECRET_KEY'),
+            "app.config.get('SECRET_KEY')",
             algorithm='HS256')
         return auth_token
 
