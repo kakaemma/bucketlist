@@ -96,7 +96,7 @@ def encode_auth_token(user_id):
 
         auth_token = jwt.encode(
             payload,
-            "app.config.get('SECRET_KEY')",
+            app.config.get('SECRET_KEY'),
             algorithm='HS256')
         return auth_token
 
