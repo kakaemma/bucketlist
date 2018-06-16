@@ -1,9 +1,7 @@
 from functools import wraps
-from flask import request, jsonify
 from models.users import UserModal
 import datetime
 import jwt
-#
 # from api.bucket import app
 from api.bucket import *
 
@@ -25,9 +23,9 @@ def method_to_be_returned(func, *args, **kwargs):
     """ This method selects which function to return"""
     try:
         if len(args) == 0 and len(kwargs) == 0:
-            return func
+            return func()
         else:
-            return func(*args, **kwargs)
+            return func (*args, **kwargs)
     except Exception as exc:
         response = jsonify({'Failed with Exception': exc})
         response.status_code = 500
@@ -38,14 +36,16 @@ def validate_content_type(f):
     """ This method checks whether the content-type is application/json"""
     @wraps(f)
     def decorated_method(*args, **kwargs):
+        # log errors here
         if request.headers.get('content-type') != 'application/json':
+
            response = jsonify({
-               'error': 'content-type not specified as application/json'
+               'Error': 'Content-Type not specified as application/json'
            })
            response.status_code = 400
            return response
 
-        return method_to_be_returned(f, *args, **kwargs)
+        return method_to_be_returned(f,  *args, **kwargs)
     return decorated_method
 
 
