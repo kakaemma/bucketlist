@@ -78,18 +78,16 @@ class Authenticate(object):
             response.status_code = 422
             return response
 
-        login_user = UserModal.check_user(email, user_password)
+        login_user_id = UserModal.check_user(email, user_password)
 
-        if not login_user:
+        if not login_user_id:
             response = jsonify({'Error': 'Invalid credentials'})
             response.status_code = 401
             return response
 
-        token = encode_auth_token(login_user).decode()
-        print(token)
-
+        token = encode_auth_token(login_user_id).decode()
         response = jsonify({
-            token:token,
+            'token':token,
             'Status': 'Successfully logged in'
 
             })
