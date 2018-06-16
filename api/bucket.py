@@ -3,7 +3,7 @@ from api import create_app
 from classes.auth import Authenticate
 from classes.bucket import Bucket
 from classes.item import Item
-from utility.utility import validate_content_type, validate_token
+from utility.utility import validate_content_type
 
 
 app = create_app('TestingEnv')
@@ -18,6 +18,7 @@ def index():
 #-------------------------------------------------------------------------
 
 @app.route('/auth/register', methods=['POST'])
+@validate_content_type
 def register():
     """ 
     Register a user with this endpoint 
@@ -35,7 +36,8 @@ def register():
         invalid_keys()
 #-------------------------------------------------------------------------
 
-@app.route('/auth/login', methods=['POST'])
+@app.route('/auth/login',  methods=['POST'])
+@validate_content_type
 def login():
     """
     End point for login
@@ -52,6 +54,7 @@ def login():
 #-------------------------------------------------------------------------
 
 @app.route('/auth/reset-password', methods=['POST'])
+@validate_content_type
 def reset_password():
     """
     End point for reset password
@@ -71,6 +74,7 @@ def reset_password():
 
 
 @app.route('/buckets', methods=['POST'])
+@validate_content_type
 def add_bucket():
     """ 
     End point for adding bucket
@@ -114,6 +118,7 @@ def get_bucket(bucket_id):
 
 
 @app.route('/buckets/<int:bucket_id>', methods=['PUT'])
+@validate_content_type
 def modify_bucket(bucket_id):
     """ 
     This endpoints gets all buckets
@@ -142,6 +147,7 @@ def delete_bucket(bucket_id):
 #-------------------------------------------------------------------------
 
 @app.route('/buckets/<int:bucket_id>/items', methods=['POST'])
+@validate_content_type
 def add_item(bucket_id):
     request.get_json(force=True)
     try:
@@ -154,6 +160,7 @@ def add_item(bucket_id):
 #---------------------------------------------------------------------------
 
 @app.route('/buckets/<int:bucket_id>/items/<int:item_id>', methods=['PUT'])
+@validate_content_type
 def edit_item(bucket_id, item_id):
     request.get_json(force=True)
     try:
