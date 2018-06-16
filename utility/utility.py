@@ -6,16 +6,16 @@ import jwt
 from api.bucket import *
 
 
-#
-# def get_token():
-#     """ This methods gets the token from the headers"""
-#     try:
-#         auth_token = request.headers.get('Authorization')
-#         token = auth_token.split(" ")[1]
-#         return token
-#     except Exception as e:
-#         # log error
-#         return e
+
+def get_token():
+    """ This methods gets the token from the headers"""
+    try:
+        auth_token = request.headers.get('Authorization')
+        token = auth_token.split(" ")[1]
+        return token
+    except Exception as e:
+        # log error
+        return e
 
 
 
@@ -49,41 +49,41 @@ def validate_content_type(f):
     return decorated_method
 
 
-# def validate_token(f):
-#     @wraps(f)
-#     def decorated_method(*args, **kwargs):
-#         token = get_token()
-#         if token is None:
-#             response = jsonify({
-#                 'Error': 'There is no access token'
-#             })
-#             response.status_code = 401
-#             return response
-#         try:
-#             user_id = decode_auth_token(token)
-#             user = UserModal.get_user_by_id(user_id)
-#             if user is None:
-#                 response = jsonify({
-#                     'status': 'mismatching or wrong token'
-#                 })
-#                 response.status_code = 401
-#                 return response
-#
-#         except Exception as exc:
-#             response = jsonify({
-#                 'Failed with exception': exc
-#             })
-#             response.status_code = 500
-#
-#         return method_to_be_returned(f, *args, **kwargs)
-#     return decorated_method
+def validate_token(f):
+    @wraps(f)
+    def decorated_method(*args, **kwargs):
+        token = get_token()
+        if token is None:
+            response = jsonify({
+                'Error': 'There is no access token'
+            })
+            response.status_code = 401
+            return response
+        try:
+            user_id = decode_auth_token(token)
+            user = UserModal.get_user_by_id(user_id)
+            if user is None:
+                response = jsonify({
+                    'status': 'mismatching or wrong token'
+                })
+                response.status_code = 401
+                return response
+
+        except Exception as exc:
+            response = jsonify({
+                'Failed with exception': exc
+            })
+            response.status_code = 500
+
+        return method_to_be_returned(f, *args, **kwargs)
+    return decorated_method
 
 
 def encode_auth_token(user_id):
     """
     This method encodes the Authorisation token
-    :param user_id:
-    :return:
+    :param user_id: 
+    :return: 
     """
     try:
 
@@ -103,18 +103,18 @@ def encode_auth_token(user_id):
         #logg errors here
         return exc
 
-#
-# def decode_auth_token(token):
-#     """
-#     Decodes the authorization token
-#     :param token:
-#     :return:
-#     """
-#     try:
-#         payload = jwt.decode(token, app.config.get('SECRET_KEY'))
-#         user = payload['sub']
-#         return user
-#     except jwt.ExpiredSignature:
-#         return 'Token expired please login again'
-#     except jwt.InvalidTokenError:
-#         return 'Invalid token. Please login again \n'
+
+def decode_auth_token(token):
+    """
+    Decodes the authorization token
+    :param token: 
+    :return: 
+    """
+    try:
+        payload = jwt.decode(token, app.config.get('SECRET_KEY'))
+        user = payload['sub']
+        return user
+    except jwt.ExpiredSignature:
+        return 'Token expired please login again'
+    except jwt.InvalidTokenError:
+        return 'Invalid token. Please login again \n'
