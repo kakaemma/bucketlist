@@ -85,6 +85,7 @@ class TestAuth(unittest.TestCase):
             'new_password': '7654321'
         })
 
+
     def test_index_route(self):
         """ Test response for title in the index page"""
         response = self.client.get('/')
@@ -92,76 +93,101 @@ class TestAuth(unittest.TestCase):
 
     def test_registration_with_no_values(self):
         """ Test for registration with empty values"""
-        response = self.client.post('/auth/register', data=self.empty_user)
+        response = self.client.post('/auth/register',
+                                    content_type='application/json',
+                                    data=self.empty_user)
         self.assertEqual(response.status_code, 406)
         self.assertIn('Missing value(s)', response.data.decode())
 
     def test_registration_with_invalid_email(self):
         """ Should throw invalid email address"""
-        response = self.client.post('/auth/register', data=self.wrong_email)
+        response = self.client.post('/auth/register',
+                                    content_type='application/json',
+                                    data=self.wrong_email)
         self.assertEqual(response.status_code, 422)
         self.assertIn('Invalid Email', response.data.decode())
 
     def test_registration_with_short_password(self):
         """ Should return password too short"""
-        response = self.client.post('/auth/register', data=self.short_pass)
+        response = self.client.post('/auth/register',
+                                    content_type='application/json',
+                                    data=self.short_pass)
         self.assertEqual(response.status_code, 422)
         self.assertIn('Password too short', response.data.decode())
 
     def test_registration_with_existing_email(self):
         """ Should throw Email exists"""
-        self.client.post('/auth/register', data=self.user)
-        response = self.client.post('/auth/register', data=self.user)
+        self.client.post('/auth/register',
+                                    content_type='application/json',
+                         data=self.user)
+        response = self.client.post('/auth/register',
+                                    content_type='application/json',
+                                    data=self.user)
         self.assertEqual(response.status_code, 409)
         self.assertIn('Email already exists', response.data.decode())
 
     def test_successful_registration(self):
         """ Should return registration successful and 201 status code"""
-        response = self.client.post('/auth/register', data=self.new_user)
+        response = self.client.post('/auth/register',
+                                    content_type='application/json',
+                                    data=self.new_user)
         self.assertEqual(response.status_code, 201)
         self.assertIn('Successfully registered', response.data.decode())
 
     def test_login_without_credentials(self):
         """ Should throw missing credentials"""
-        response = self.client.post('/auth/login', data=self.empty_login)
+        header = {'content_type':'application/json'}
+        response = self.client.post('/auth/login',  data=self.empty_login, content_type='application/json')
         self.assertEqual(response.status_code, 422)
         self.assertIn('Missing login credentials', response.data.decode())
 
     def test_login_with_invalid_email(self):
         """ Should throw invalid email address"""
-        response = self.client.post('/auth/login', data=self.invalid_login_email)
+        response = self.client.post('/auth/login',
+                                    content_type='application/json',
+                                    data=self.invalid_login_email)
         self.assertEqual(response.status_code, 422)
         self.assertIn('Invalid Email address', response.data.decode())
-
+    #
     def test_login_with_invalid_credentials(self):
         """ Should throw invalid credentials"""
-        response = self.client.post('/auth/login', data=self.invalid_user)
+        response = self.client.post('/auth/login',
+                                    content_type='application/json',
+                                    data=self.invalid_user)
         self.assertEqual(response.status_code, 401)
         self.assertIn('Invalid credentials', response.data.decode())
-
+    #
     def test_successful_login(self):
         """ Show login successful """
         self.client.post('/auth/register', data=self.user)
 
-        response = self.client.post('/auth/login', data=self.valid_login_user)
+        response = self.client.post('/auth/login',
+                                    content_type='application/json',
+                                    data=self.valid_login_user)
         self.assertEqual(response.status_code, 200)
         self.assertIn('Successfully logged in', response.data.decode())
-
+    #
     def test_reset_password_with_no_password(self):
         """ Should throw error for non existing email or password"""
         self.tearDown()
-        self.client.post('/auth/register', data=self.user)
+        self.client.post('/auth/register',
+                                    content_type='application/json',
+                         data=self.user)
 
         response = self.client.post('/auth/reset-password',
+                                    content_type='application/json',
                                     data=self.empty_reset_password)
         self.assertEqual(response.status_code, 422)
         self.assertIn('Missing email or password', response.data.decode())
 
     def test_reset_password_with_non_existing_email(self):
         """ Throw No account with that email"""
-        self.client.post('/auth/register', data=self.user)
+        self.client.post('/auth/register',
+                                    content_type='application/json',
+                         data=self.user)
 
         response = self.client.post('/auth/reset-password',
+                                    content_type='application/json',
                                     data=self.wrong_reset_details)
         self.assertEqual(response.status_code, 403)
         self.assertIn('Email and password do not exist',
@@ -169,9 +195,12 @@ class TestAuth(unittest.TestCase):
 
     def test_reset_password_with_wrong_password(self):
         """ Throw No account with that email"""
-        self.client.post('/auth/register', data=self.user)
+        self.client.post('/auth/register',
+                                    content_type='application/json',
+                         data=self.user)
 
         response = self.client.post('/auth/reset-password',
+                                    content_type='application/json',
                                     data=self.wrong_reset_details)
         self.assertEqual(response.status_code, 403)
         self.assertIn('Email and password do not exist',
@@ -179,9 +208,11 @@ class TestAuth(unittest.TestCase):
 
     def test_reset_password_successfully(self):
         """ Should show password reset successfully"""
-        self.tearDown()
-        self.client.post('/auth/register', data=self.reset_user)
+        self.client.post('/auth/register',
+                                    content_type='application/json',
+                         data=self.reset_user)
         response = self.client.post('/auth/reset-password',
+                                    content_type='application/json',
                                     data=self.reset_details)
         self.assertEqual(response.status_code, 200)
         self.assertIn('Password reset successfully',
