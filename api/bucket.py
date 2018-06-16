@@ -180,10 +180,6 @@ def delete_item(bucket_id, item_id):
     except KeyError:
         invalid_keys()
 
-
-@app.route('/auth/logout', methods=['POST'])
-def logout():
-    pass
 #-------------------------------------------------------------------------
 
 def invalid_keys():
@@ -195,4 +191,3 @@ def invalid_keys():
     response.status_code = 400
     return response
 #--------------------------------------------------------------------------
-
