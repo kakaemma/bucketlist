@@ -24,6 +24,10 @@ class TestBucket(unittest.TestCase):
             'email': '1234@gmail.com',
             'password': '12345678'
         })
+        self.user_login = json.dumps({
+            'email': '1234@gmail.com',
+            'password': '12345678'
+        })
         self.bucket = json.dumps({
             'name': 'Adventure',
             'desc': 'Touring'
@@ -41,6 +45,9 @@ class TestBucket(unittest.TestCase):
             'desc': 'Winners'
         })
         # response = self.client.post('/auth/register', data=self.user)
+        # res = self.client.post('/auth/login', data=self.user_login)
+        # json_repr = json.loads(res.data.decode())
+        # self.token = json_repr['token']
 
     def test_get_all_buckets_on_empty_bucket_list(self):
         """ Test get all buckets when bucket list is empty"""
@@ -62,14 +69,16 @@ class TestBucket(unittest.TestCase):
 
     def test_get_single_bucket_that_does_not_exist(self):
         """ Should return bucket does not exist"""
-        self.client.post('/buckets', data=self.bucket2)
+        self.client.post('/buckets', content_type='application/json',
+                         data=self.bucket2)
         response = self.client.get('/buckets/45')
         self.assertEquals(response.status_code, 404)
         self.assertIn('Bucket does not exist', response.data.decode())
 
     def test_get_single_bucket_successfully(self):
         """ Return message with bucket"""
-        self.client.post('/buckets', data=self.bucket2)
+        self.client.post('/buckets', content_type='application/json',
+                         data=self.bucket2)
         response = self.client.get('/buckets/1')
         self.assertEquals(response.status_code, 200)
         self.assertIn('Bucket', response.data.decode())
@@ -80,27 +89,38 @@ class TestBucket(unittest.TestCase):
             'name': '',
             'desc': 'rally wins'
         })
-        response = self.client.post('/buckets', data=bucket)
+        response = self.client.post('/buckets',
+                                    content_type='application/json',
+                                    data=bucket)
         self.assertEquals(response.status_code, 400)
         self.assertIn('Missing details', response.data.decode())
 
     def test_add_bucket_successfully(self):
         """Return message with bucket on success"""
-        response = self.client.post('/buckets', data=self.bucket)
+        response = self.client.post('/buckets',
+                                    content_type='application/json',
+                                    data=self.bucket)
         self.assertEquals(response.status_code, 201)
         self.assertIn('Bucket', response.data.decode())
 
     def test_add_bucket_with_existing_bucket(self):
         """Return bucket already exists"""
-        self.client.post('/buckets', data=self.bucket_conf)
-        response = self.client.post('/buckets', data=self.bucket_conf)
+        self.client.post('/buckets',
+                         content_type='application/json',
+                         data=self.bucket_conf)
+        response = self.client.post('/buckets',
+                                    content_type='application/json',
+                                    data=self.bucket_conf)
         self.assertEquals(response.status_code, 409)
         self.assertIn('Bucket already exists', response.data.decode())
 
     def test_modify_bucket_with_missing_details(self):
         """ Should return missing details and status code 400"""
-        self.client.post('/buckets', data=self.bucket)
-        response = self.client.put('buckets/1', data=self.bucket_mod)
+        self.client.post('/buckets',
+                         content_type='application/json', data=self.bucket)
+        response = self.client.put('buckets/1',
+                                    content_type='application/json',
+                                   data=self.bucket_mod)
         self.assertEquals(response.status_code, 400)
         self.assertIn('Missing details', response.data.decode())
 
@@ -109,22 +129,30 @@ class TestBucket(unittest.TestCase):
         Should return no buckets available on modifying 
         with empty bucket list
         """
-        response = self.client.put('buckets/1', data=self.bucket)
+        response = self.client.put('buckets/1',
+                                   content_type='application/json',
+                                   data=self.bucket)
         self.assertEquals(response.status_code, 400)
         self.assertIn('No buckets available', response.data.decode())
 
     def test_modify_bucket_with_same_bucket_name(self):
         """ Should return cannot modify bucket with the same name"""
-        self.client.post('/buckets', data=self.bucket)
-        response = self.client.put('/buckets/1', data=self.bucket)
+        self.client.post('/buckets',
+                         content_type='application/json',
+                         data=self.bucket)
+        response = self.client.put('/buckets/1',
+                                   content_type='application/json',
+                                   data=self.bucket)
         self.assertEquals(response.status_code, 400)
         self.assertIn('Bucket name can not be the same',
                       response.data.decode())
 
     def test_modify_bucket_successfully(self):
         """ Should return successfully modified bucket"""
-        self.client.post('/buckets', data=self.bucket)
+        self.client.post('/buckets',
+                         content_type='application/json', data=self.bucket)
         response = self.client.put('/buckets/1',
+                                    content_type='application/json',
                                    data=self.bucket_mod_final)
         self.assertEquals(response.status_code, 200)
         self.assertIn('Bucket successfully modified',
@@ -139,7 +167,9 @@ class TestBucket(unittest.TestCase):
 
     def test_delete_bucket_successfully(self):
         """ Should return bucket successfully deleted"""
-        self.client.post('/buckets', data=self.bucket)
+        self.client.post('/buckets',
+                                    content_type='application/json',
+                         data=self.bucket)
         response = self.client.delete('buckets/1')
         self.assertEquals(response.status_code, 200)
         self.assertIn('Bucket successfully deleted',
