@@ -77,32 +77,32 @@ def validate_content_type(f):
 #
 #         return method_to_be_returned(f, *args, **kwargs)
 #     return decorated_method
-#
-#
-# def encode_auth_token(user_id):
-#     """
-#     This method encodes the Authorisation token
-#     :param user_id:
-#     :return:
-#     """
-#     try:
-#
-#         payload = {
-#             'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
-#             'iat': datetime.datetime.utcnow(),
-#             'sub': user_id
-#         }
-#
-#         auth_token = jwt.encode(
-#             payload,
-#             "app.config.get('SECRET_KEY')",
-#             algorithm='HS256')
-#         return auth_token
-#
-#     except Exception as exc:
-#         #logg errors here
-#         return exc
-#
+
+
+def encode_auth_token(user_id):
+    """
+    This method encodes the Authorisation token
+    :param user_id:
+    :return:
+    """
+    try:
+
+        payload = {
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
+            'iat': datetime.datetime.utcnow(),
+            'sub': user_id
+        }
+
+        auth_token = jwt.encode(
+            payload,
+            "app.config.get('SECRET_KEY')",
+            algorithm='HS256')
+        return auth_token
+
+    except Exception as exc:
+        #logg errors here
+        return exc
+
 #
 # def decode_auth_token(token):
 #     """
