@@ -3,7 +3,7 @@ from api import create_app
 from classes.auth import Authenticate
 from classes.bucket import Bucket
 from classes.item import Item
-from utility.utility import validate_content_type
+from utility.utility import validate_content_type, validate_token
 
 
 app = create_app('TestingEnv')
@@ -75,6 +75,7 @@ def reset_password():
 
 @app.route('/buckets', methods=['POST'])
 @validate_content_type
+@validate_token
 def add_bucket():
     """ 
     End point for adding bucket
