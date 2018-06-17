@@ -10,12 +10,11 @@ from api.bucket import *
 def get_token():
     """ This methods gets the token from the headers"""
     try:
-        auth_token = request.headers.get('Authorization')
-        token = auth_token.split(" ")[1]
+        token = request.headers.get('Authorization')
         return token
-    except Exception as e:
+    except Exception as exc:
         # log error
-        return e
+        return exc
 
 
 
@@ -111,8 +110,9 @@ def decode_auth_token(token):
     :return: 
     """
     try:
-        payload = jwt.decode(token, app.config.get('SECRET_KEY'))
+        payload = jwt.decode(token, "app.config.get('SECRET_KEY')")
         user = payload['sub']
+        print(user)
         return user
     except jwt.ExpiredSignature:
         return 'Token expired please login again'
