@@ -106,7 +106,6 @@ class Bucket(object):
             return response
 
         check_for_buckets = BucketModal.check_for_buckets_available()
-        print(check_for_buckets)
         if check_for_buckets:
             single_bucket = BucketModal.get_bucket(bucket_id)
             if not single_bucket:
