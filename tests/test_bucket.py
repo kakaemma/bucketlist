@@ -78,7 +78,7 @@ class TestBucket(unittest.TestCase):
         self.client.post('/buckets', content_type='application/json',
                          data=self.bucket2,
                          headers=self.header)
-        response = self.client.get('/buckets/45')
+        response = self.client.get('/buckets/45', headers=self.header)
         self.assertEquals(response.status_code, 404)
         self.assertIn('Bucket does not exist', response.data.decode())
 
