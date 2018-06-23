@@ -92,6 +92,7 @@ def add_bucket():
 # -------------------------------------------------------------------------
 
 @app.route('/buckets', methods=['GET'])
+@validate_token
 def get_buckets():
     """ 
         This endpoints gets all buckets
@@ -106,6 +107,7 @@ def get_buckets():
 
 
 @app.route('/buckets/<int:bucket_id>', methods=['GET'])
+@validate_token
 def get_bucket(bucket_id):
     """ 
     This endpoints gets all buckets
@@ -120,6 +122,7 @@ def get_bucket(bucket_id):
 
 @app.route('/buckets/<int:bucket_id>', methods=['PUT'])
 @validate_content_type
+@validate_token
 def modify_bucket(bucket_id):
     """ 
     This endpoints gets all buckets
@@ -136,6 +139,7 @@ def modify_bucket(bucket_id):
 
 
 @app.route('/buckets/<int:bucket_id>', methods=['DELETE'])
+@validate_token
 def delete_bucket(bucket_id):
     """ 
     This endpoints gets all buckets
@@ -149,6 +153,7 @@ def delete_bucket(bucket_id):
 
 @app.route('/buckets/<int:bucket_id>/items', methods=['POST'])
 @validate_content_type
+@validate_token
 def add_item(bucket_id):
     request.get_json(force=True)
     try:
@@ -162,6 +167,7 @@ def add_item(bucket_id):
 
 @app.route('/buckets/<int:bucket_id>/items/<int:item_id>', methods=['PUT'])
 @validate_content_type
+@validate_token
 def edit_item(bucket_id, item_id):
     request.get_json(force=True)
     try:
@@ -174,6 +180,7 @@ def edit_item(bucket_id, item_id):
         invalid_keys()
 
 @app.route('/buckets/<int:bucket_id>/items/<int:item_id>', methods=['DELETE'])
+@validate_token
 def delete_item(bucket_id, item_id):
     try:
         response = Item.delete_item(bucket_id, item_id)
