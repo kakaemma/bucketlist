@@ -24,6 +24,21 @@ class TestItem(unittest.TestCase):
             'name': 'Adventure',
             'desc': 'Rallying'
         })
+        self.user = json.dumps({
+            'name': 'emma',
+            'email': 'ek@gmail.com',
+            'password': '12345678'
+        })
+        self.user_login = json.dumps({
+            'email': 'ek@gmail.com',
+            'password': '12345678'
+        })
+        res = self.client.post('/auth/login',
+                               content_type='application/json',
+                               data=self.user_login)
+        json_repr = json.loads(res.data.decode())
+        self.token = json_repr['token']
+        self.header = {'Authorization': self.token}
 
     def test_add_item_with_missing_details(self):
         response = self.client.post('/buckets/1/items',
@@ -43,7 +58,7 @@ class TestItem(unittest.TestCase):
     def test_add_item_on_non_existing_bucket(self):
         self.client.post('/buckets',
                                     content_type='application/json',
-                         data=self.bucket)
+                         data=self.bucket, headers=self.header)
         response = self.client.post('/buckets/4/items',
                                     content_type='application/json',
                                     data=self.item)
@@ -54,7 +69,7 @@ class TestItem(unittest.TestCase):
     def test_add_item_successfully(self):
         self.client.post('/buckets',
                                     content_type='application/json',
-                         data=self.bucket)
+                         data=self.bucket, headers=self.header)
         response = self.client.post('/buckets/1/items',
                                     content_type='application/json',
                                     data=self.item)
@@ -65,7 +80,7 @@ class TestItem(unittest.TestCase):
     def test_modify_item_with_empty_values(self):
         self.client.post('/buckets',
                                     content_type='application/json',
-                         data=self.bucket)
+                         data=self.bucket, headers=self.header)
         response = self.client.put('/buckets/1/items/1',
                                     content_type='application/json',
                                     data=self.item_empty)
@@ -84,7 +99,7 @@ class TestItem(unittest.TestCase):
     def test_modify_item_on_non_existing_bucket(self):
         self.client.post('/buckets',
                                     content_type='application/json',
-                         data=self.bucket)
+                         data=self.bucket, headers=self.header)
         self.client.post('/buckets/1/items',
                                     content_type='application/json',
                                     data=self.item)
@@ -98,7 +113,7 @@ class TestItem(unittest.TestCase):
     def test_modify_item_on_non_existing_item(self):
         self.client.post('/buckets',
                                     content_type='application/json',
-                         data=self.bucket)
+                         data=self.bucket, headers=self.header)
         self.client.post('/buckets/1/items',
                                     content_type='application/json',
                                     data=self.item)
@@ -113,7 +128,7 @@ class TestItem(unittest.TestCase):
         """ Should return item successfully updated"""
         self.client.post('/buckets',
                                     content_type='application/json',
-                         data=self.bucket)
+                         data=self.bucket, headers=self.header)
         self.client.post('/buckets/1/items',
                                     content_type='application/json',
                                     data=self.item)
@@ -133,7 +148,7 @@ class TestItem(unittest.TestCase):
     def test_delete_item_with_wrong_id(self):
         self.client.post('/buckets',
                                     content_type='application/json',
-                         data=self.bucket)
+                         data=self.bucket, headers=self.header)
         self.client.post('/buckets/1/items',
                                     content_type='application/json',
                                     data=self.item)
@@ -146,7 +161,7 @@ class TestItem(unittest.TestCase):
         """ Should return error on non existing bucket"""
         self.client.post('/buckets',
                                     content_type='application/json',
-                         data=self.bucket)
+                         data=self.bucket, headers=self.header)
         self.client.post('/buckets/1/items',
                                     content_type='application/json',
                                     data=self.item)
@@ -159,7 +174,7 @@ class TestItem(unittest.TestCase):
         """ Should return item successfully deleted"""
         self.client.post('/buckets',
                                     content_type='application/json',
-                         data=self.bucket)
+                         data=self.bucket, headers=self.header)
         self.client.post('/buckets/1/items',
                                     content_type='application/json',
                                     data=self.item)
