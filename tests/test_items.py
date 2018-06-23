@@ -43,14 +43,16 @@ class TestItem(unittest.TestCase):
     def test_add_item_with_missing_details(self):
         response = self.client.post('/buckets/1/items',
                                     content_type='application/json',
-                                    data=self.item_empty)
+                                    data=self.item_empty,
+                                    headers=self.header)
         self.assertEquals(response.status_code, 400)
         self.assertIn('Missing Details', response.data.decode())
 
     def test_add_item_with_no_bucket_list(self):
         response = self.client.post('/buckets/1/items',
                                     content_type='application/json',
-                                    data=self.item)
+                                    data=self.item,
+                                    headers=self.header)
         self.assertEquals(response.status_code, 400)
         self.assertIn('Attempting to add item on empty bucket list',
                       response.data.decode())
@@ -61,7 +63,8 @@ class TestItem(unittest.TestCase):
                          data=self.bucket, headers=self.header)
         response = self.client.post('/buckets/4/items',
                                     content_type='application/json',
-                                    data=self.item)
+                                    data=self.item,
+                                    headers=self.header)
         self.assertEquals(response.status_code, 400)
         self.assertIn('Adding Bucket item to non existing bucket',
                       response.data.decode())
@@ -72,7 +75,8 @@ class TestItem(unittest.TestCase):
                          data=self.bucket, headers=self.header)
         response = self.client.post('/buckets/1/items',
                                     content_type='application/json',
-                                    data=self.item)
+                                    data=self.item,
+                                    headers=self.header)
         self.assertEquals(response.status_code, 201)
         self.assertIn('Bucket item successfully added',
                       response.data.decode())
@@ -83,7 +87,8 @@ class TestItem(unittest.TestCase):
                          data=self.bucket, headers=self.header)
         response = self.client.put('/buckets/1/items/1',
                                     content_type='application/json',
-                                    data=self.item_empty)
+                                    data=self.item_empty,
+                                   headers=self.header)
         self.assertEquals(response.status_code, 400)
         self.assertIn('Missing details',
                       response.data.decode())
@@ -91,7 +96,8 @@ class TestItem(unittest.TestCase):
     def test_modify_item_on_empty_bucket(self):
         response = self.client.put('/buckets/1/items/1',
                                     content_type='application/json',
-                                    data=self.item_edit)
+                                    data=self.item_edit,
+                                   headers=self.header)
         self.assertEquals(response.status_code, 400)
         self.assertIn('Can not edit item on empty bucket list',
                       response.data.decode())
@@ -102,10 +108,12 @@ class TestItem(unittest.TestCase):
                          data=self.bucket, headers=self.header)
         self.client.post('/buckets/1/items',
                                     content_type='application/json',
-                                    data=self.item)
+                                    data=self.item,
+                         headers=self.header)
         response = self.client.put('/buckets/2/items/1',
                                     content_type='application/json',
-                                   data=self.item_edit)
+                                   data=self.item_edit,
+                                   headers=self.header)
         self.assertEquals(response.status_code, 400)
         self.assertIn('Attempting to modify item on non existing bucket',
                       response.data.decode())
@@ -116,10 +124,12 @@ class TestItem(unittest.TestCase):
                          data=self.bucket, headers=self.header)
         self.client.post('/buckets/1/items',
                                     content_type='application/json',
-                                    data=self.item)
+                                    data=self.item,
+                         headers=self.header)
         response = self.client.put('/buckets/1/items/3',
                                     content_type='application/json',
-                                   data=self.item_edit)
+                                   data=self.item_edit,
+                                   headers=self.header)
         self.assertEquals(response.status_code, 400)
         self.assertIn('Attempting to modify item on non existing item',
                       response.data.decode())
@@ -131,16 +141,19 @@ class TestItem(unittest.TestCase):
                          data=self.bucket, headers=self.header)
         self.client.post('/buckets/1/items',
                                     content_type='application/json',
-                                    data=self.item)
+                                    data=self.item,
+                         headers=self.header)
         response = self.client.put('/buckets/1/items/1',
                                     content_type='application/json',
-                                   data=self.item_edit)
+                                   data=self.item_edit,
+                                   headers=self.header)
         self.assertEquals(response.status_code, 200)
         self.assertIn('Item successfully updated',
                       response.data.decode())
 
     def test_delete_item_with_no_bucket_list(self):
-        response = self.client.delete('/buckets/1/items/1')
+        response = self.client.delete('/buckets/1/items/1',
+                                      headers=self.header)
         self.assertEquals(response.status_code, 400)
         self.assertIn('Can not delete item on empty bucket list',
                       response.data.decode())
@@ -151,8 +164,10 @@ class TestItem(unittest.TestCase):
                          data=self.bucket, headers=self.header)
         self.client.post('/buckets/1/items',
                                     content_type='application/json',
-                                    data=self.item)
-        response = self.client.delete('/buckets/1/items/2')
+                                    data=self.item,
+                         headers=self.header)
+        response = self.client.delete('/buckets/1/items/2',
+                                      headers=self.header)
         self.assertEquals(response.status_code, 400)
         self.assertIn('Attempting to delete non existing item',
                       response.data.decode())
@@ -164,8 +179,9 @@ class TestItem(unittest.TestCase):
                          data=self.bucket, headers=self.header)
         self.client.post('/buckets/1/items',
                                     content_type='application/json',
-                                    data=self.item)
-        response = self.client.delete('/buckets/2/items/1')
+                                    data=self.item, headers=self.header)
+        response = self.client.delete('/buckets/2/items/1'
+                                      , headers=self.header)
         self.assertEquals(response.status_code, 400)
         self.assertIn('Attempting to delete item on non existing bucket',
                       response.data.decode())
@@ -177,8 +193,9 @@ class TestItem(unittest.TestCase):
                          data=self.bucket, headers=self.header)
         self.client.post('/buckets/1/items',
                                     content_type='application/json',
-                                    data=self.item)
-        response = self.client.delete('/buckets/1/items/1')
+                                    data=self.item, headers=self.header)
+        response = self.client.delete('/buckets/1/items/1',
+                                      headers=self.header)
         self.assertEquals(response.status_code, 200)
         self.assertIn('Item successfully deleted', response.data.decode())
 
