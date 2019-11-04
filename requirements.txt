@@ -16,7 +16,7 @@ construct==2.9.41
 coverage==4.5.1
 cryptography==2.2.2
 Django==1.11.3
-Flask==0.12.2
+Flask==1.0
 Flask-API==1.0
 Flask-Bcrypt==0.7.1
 Flask-Cors==3.0.3
